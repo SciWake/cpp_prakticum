@@ -16,6 +16,9 @@ enum class AnimalSortKey {
     RELATIVE_WEIGHT  // по weight / age
 };
 
+// ---------------------------------
+// ПРЕДПОЧТИТЕЛЬНЫЙ ВАРИАНТ РЕШЕНИЯ
+// ---------------------------------
 // template <typename Container, typename KeyMapper>
 // void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
 //     // теперь можно сортировать контейнер
@@ -25,7 +28,7 @@ enum class AnimalSortKey {
 //     });
 // }
 
-// Предпочтительный варинт 
+
 // template <typename Container>
 // void SortBy(Container& animals, AnimalSortKey sort_key, bool reverse = false) {
 //     switch (sort_key) {
@@ -39,11 +42,13 @@ enum class AnimalSortKey {
 // }
 
 
+
+// ------------------------------
 // "Python Style"
+// -----------------------------
 template <typename Container, typename KeyMapper>
 void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
-        // если KeyMapper — это AnimalSortKey...
-    if (is_same_v<KeyMapper, AnimalSortKey>) {
+    if constexpr (is_same_v<KeyMapper, AnimalSortKey>) {
         switch (key_mapper) {
             case AnimalSortKey::AGE:
                 return SortBy(container, [](const auto& x) { return x.age; }, reverse);
@@ -52,18 +57,18 @@ void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
             case AnimalSortKey::RELATIVE_WEIGHT:
                 return SortBy(container, [](const auto& x) { return x.weight / x.age; }, reverse);
         }
-                // вышли из функции, остальное снаружи if
-    }
-    if (reverse) {
-        sort(container.begin(), container.end(),
-             [key_mapper](const auto& lhs, const auto& rhs) {
-                return key_mapper(lhs) > key_mapper(rhs);
-             });
     } else {
-        sort(container.begin(), container.end(),
-             [key_mapper](const auto& lhs, const auto& rhs) {
-                return key_mapper(lhs) < key_mapper(rhs);
-             });
+        if (reverse) {
+            sort(container.begin(), container.end(),
+                 [key_mapper](const auto& lhs, const auto& rhs) {
+                    return key_mapper(lhs) > key_mapper(rhs);
+                 });
+        } else {
+            sort(container.begin(), container.end(),
+                 [key_mapper](const auto& lhs, const auto& rhs) {
+                    return key_mapper(lhs) < key_mapper(rhs);
+                 });
+        }
     }
 }
 
