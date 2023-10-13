@@ -25,10 +25,10 @@ void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
     });
 }
 
-void SortBy(vector<Animal>& animals, AnimalSortKey sort_key, bool reverse = false) {
+template <typename Container>
+void SortBy(Container& animals, AnimalSortKey sort_key, bool reverse = false) {
     switch (sort_key) {
         case AnimalSortKey::AGE:
-                        // возвращается void, но return помогает сразу выйти из функции
             return SortBy(animals, [](const auto& x) { return x.age; }, reverse);
         case AnimalSortKey::WEIGHT:
             return SortBy(animals, [](const auto& x) { return x.weight; }, reverse);
