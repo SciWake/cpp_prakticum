@@ -16,24 +16,54 @@ enum class AnimalSortKey {
     RELATIVE_WEIGHT  // по weight / age
 };
 
+// template <typename Container, typename KeyMapper>
+// void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
+//     // теперь можно сортировать контейнер
+//     // с компаратором key_mapper(lhs) < key_mapper(rhs)
+//     sort(begin(container), end(container), [key_mapper, reverse](const auto& lhs, const auto& rhs){
+//         return reverse ? key_mapper(lhs) > key_mapper(rhs) : key_mapper(lhs) < key_mapper(rhs);
+//     });
+// }
+
+// Предпочтительный варинт 
+// template <typename Container>
+// void SortBy(Container& animals, AnimalSortKey sort_key, bool reverse = false) {
+//     switch (sort_key) {
+//         case AnimalSortKey::AGE:
+//             return SortBy(animals, [](const auto& x) { return x.age; }, reverse);
+//         case AnimalSortKey::WEIGHT:
+//             return SortBy(animals, [](const auto& x) { return x.weight; }, reverse);
+//         case AnimalSortKey::RELATIVE_WEIGHT:
+//             return SortBy(animals, [](const auto& x) { return x.weight / x.age; }, reverse);
+//     }
+// }
+
+
+// "Python Style"
 template <typename Container, typename KeyMapper>
 void SortBy(Container& container, KeyMapper key_mapper, bool reverse = false) {
-    // теперь можно сортировать контейнер
-    // с компаратором key_mapper(lhs) < key_mapper(rhs)
-    sort(begin(container), end(container), [key_mapper, reverse](const auto& lhs, const auto& rhs){
-        return reverse ? key_mapper(lhs) > key_mapper(rhs) : key_mapper(lhs) < key_mapper(rhs);
-    });
-}
-
-template <typename Container>
-void SortBy(Container& animals, AnimalSortKey sort_key, bool reverse = false) {
-    switch (sort_key) {
-        case AnimalSortKey::AGE:
-            return SortBy(animals, [](const auto& x) { return x.age; }, reverse);
-        case AnimalSortKey::WEIGHT:
-            return SortBy(animals, [](const auto& x) { return x.weight; }, reverse);
-        case AnimalSortKey::RELATIVE_WEIGHT:
-            return SortBy(animals, [](const auto& x) { return x.weight / x.age; }, reverse);
+        // если KeyMapper — это AnimalSortKey...
+    if (is_same_v<KeyMapper, AnimalSortKey>) {
+        switch (key_mapper) {
+            case AnimalSortKey::AGE:
+                return SortBy(container, [](const auto& x) { return x.age; }, reverse);
+            case AnimalSortKey::WEIGHT:
+                return SortBy(container, [](const auto& x) { return x.weight; }, reverse);
+            case AnimalSortKey::RELATIVE_WEIGHT:
+                return SortBy(container, [](const auto& x) { return x.weight / x.age; }, reverse);
+        }
+                // вышли из функции, остальное снаружи if
+    }
+    if (reverse) {
+        sort(container.begin(), container.end(),
+             [key_mapper](const auto& lhs, const auto& rhs) {
+                return key_mapper(lhs) > key_mapper(rhs);
+             });
+    } else {
+        sort(container.begin(), container.end(),
+             [key_mapper](const auto& lhs, const auto& rhs) {
+                return key_mapper(lhs) < key_mapper(rhs);
+             });
     }
 }
 
