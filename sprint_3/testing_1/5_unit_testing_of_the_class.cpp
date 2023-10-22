@@ -23,7 +23,13 @@ public:
 
     bool AreSynonyms(const string& first_word, const string& second_word) const {
         // Напишите недостающий код
-        return false;
+        if (synonyms_.count(first_word)) {
+            return synonyms_.at(first_word).count(second_word) != 0;
+        }
+        if (synonyms_.count(second_word)) {
+            return synonyms_.at(second_word).count(first_word) != 0;
+        }
+       return false;
     }
 
 private:
@@ -47,6 +53,17 @@ void TestAddingSynonymsIncreasesTheirCount() {
 
 void TestAreSynonyms() {
     // Напишите недостающий код
+    Synonyms synonyms;
+    assert(synonyms.AreSynonyms("music"s, "melody"s) == false);
+    
+    synonyms.Add("music"s, "melody"s);
+    assert(synonyms.AreSynonyms("music"s, "melody"s) == true);
+    assert(synonyms.AreSynonyms("music"s, "mouse"s) == false);
+
+    synonyms.Add("music"s, "mouse"s);
+    synonyms.Add("mouse"s, "melody"s);
+    assert(synonyms.AreSynonyms("music"s, "mouse"s) == true);
+    assert(synonyms.AreSynonyms("melody"s, "mouse"s) == true);
 }
 
 void TestSynonyms() {
