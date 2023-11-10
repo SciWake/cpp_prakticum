@@ -139,6 +139,19 @@ struct BusesForStopResponse {
 
 ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
     // Реализуйте эту функцию
+    if (r.buses.empty()) {
+        os << "No stop"s << endl;
+    } else {
+        bool is_first = true;
+        for (const string& bus : r.buses) {
+            if (!is_first) {
+                os << " "s;
+            }
+            is_first = false;
+            os << bus;
+        }
+        os << endl;
+    }
     return os;
 }
 
@@ -171,14 +184,16 @@ public:
             stops_to_buses_[stop].push_back(bus);
         }
     }
-
+    // BusesForStopResponse - от данной структуры можно избавиться, 
+    // просто занимает память. Можно использовать перегрузку для вывода.
+    // для этого можно вернуть stops_to_buses_.at(stop)
     BusesForStopResponse GetBusesForStop(const string& stop) const {
         // Реализуйте этот метод
-        BusesForStopResponse buses_for_stop;
-        for (const string& bus : stops_to_buses_.at(stop)) {
-            buses_for_stop.buses.push_back(bus);
+        BusesForStopResponse response;
+        if (stops_to_buses_.count(stop) != 0) {
+            response.buses = stops_to_buses_.at(stop);
         }
-        return buses_for_stop;
+        return response;
     }
 
     StopsForBusResponse GetStopsForBus(const string& bus) const {
