@@ -109,7 +109,26 @@ struct Query {
 };
 
 istream& operator>>(istream& is, Query& q) {
-    // Реализуйте эту функцию
+    string operation_code;
+    is >> operation_code;
+    if (operation_code == "NEW_BUS"s) {
+        q.type = QueryType::NewBus;
+        is >> q.bus;
+        int count_stops = 0;
+        is >> count_stops;
+        q.stops.resize(count_stops);
+        for (string& stop : q.stops) {
+            is >> stop;
+        } 
+    } else if (operation_code == "BUSES_FOR_STOP"s) {
+        q.type = QueryType::BusesForStop;
+        is >> q.stop;
+    } else if (operation_code == "STOPS_FOR_BUS"s) {
+        q.type = QueryType::StopsForBus;
+        is >> q.bus;
+    } else if (operation_code == "ALL_BUSES"s) {
+        q.type = QueryType::AllBuses;
+    }
     return is;
 }
 
@@ -141,6 +160,8 @@ ostream& operator<<(ostream& os, const AllBusesResponse& r) {
 }
 
 class BusManager {
+private:
+    map<string, vector<string>> buses_to_stops_, stops_to_buses_;
 public:
     void AddBus(const string& bus, const vector<string>& stops) {
         // Реализуйте этот метод
