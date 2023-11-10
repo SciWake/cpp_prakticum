@@ -134,6 +134,7 @@ istream& operator>>(istream& is, Query& q) {
 
 struct BusesForStopResponse {
     // Наполните полями эту структуру
+    vector<string> buses;
 };
 
 ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
@@ -165,10 +166,19 @@ private:
 public:
     void AddBus(const string& bus, const vector<string>& stops) {
         // Реализуйте этот метод
+        buses_to_stops_[bus] = stops;
+        for (const string& stop: stops) {
+            stops_to_buses_[stop].push_back(bus);
+        }
     }
 
     BusesForStopResponse GetBusesForStop(const string& stop) const {
         // Реализуйте этот метод
+        BusesForStopResponse buses_for_stop;
+        for (const string& bus : stops_to_buses_.at(stop)) {
+            buses_for_stop.buses.push_back(bus);
+        }
+        return buses_for_stop;
     }
 
     StopsForBusResponse GetStopsForBus(const string& bus) const {
