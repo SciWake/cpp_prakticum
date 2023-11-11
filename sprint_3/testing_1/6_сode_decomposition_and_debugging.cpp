@@ -191,6 +191,17 @@ struct AllBusesResponse {
 
 ostream& operator<<(ostream& os, const AllBusesResponse& r) {
     // Реализуйте эту функцию
+    if (r.buses_to_stops.empty()) {
+        os << "No buses"s << endl;
+    } else {
+        for (const auto& bus_item : r.buses_to_stops) {
+            os << "Bus "s << bus_item.first << ":"s;
+            for (const string& stop : bus_item.second) {
+                os << " "s << stop;
+            }
+            os << endl;
+        }
+        }
     return os;
 }
 
@@ -230,6 +241,9 @@ public:
 
     AllBusesResponse GetAllBuses() const {
         // Реализуйте этот метод
+        AllBusesResponse response;
+        response.buses_to_stops = buses_to_stops_;
+        return response;
     }
 };
 
