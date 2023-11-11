@@ -142,13 +142,8 @@ ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
     if (r.buses.empty()) {
         os << "No stop"s;
     } else {
-        bool is_first = true;
         for (const string& bus : r.buses) {
-            if (!is_first) {
-                os << " "s;
-            }
-            is_first = false;
-            os << bus;
+            os << bus << " "s;
         }
     }
     return os;
