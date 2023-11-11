@@ -114,3 +114,27 @@ int main() {
     const vector<int> expected_positives = {1, 2, 6, 2, 4, 3};
     ASSERT_EQUAL(TakePositives(numbers), expected_positives);
 }
+
+
+// Пример запуска теста
+
+void TestAddingSynonymsIncreasesTheirCount() {
+    // ...
+
+    cerr << "TestAddingSynonymsIncreasesTheirCount OK"s << endl;
+}
+
+void TestAreSynonyms() {
+    // ...
+
+    cerr << "TestAreSynonyms OK"s << endl;
+}
+
+
+template <typename TestFunc>
+void RunTestImpl(const TestFunc& func, const string& test_name) {
+    func();
+    cerr << test_name << " OK"s << endl;
+}
+
+#define RUN_TEST(func) RunTestImpl(func, #func)
