@@ -1,7 +1,56 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
+#include <map>
+
 using namespace std;
+
+
+template <typename T>
+ostream& operator<<(ostream& output, const vector<T>& items) {
+    output << "["s;
+    bool first_item = true;
+    for (const T& item : items) {
+        if (!first_item) {
+            output << ", "s;
+        }
+        output << item;
+        first_item = false;
+    }
+    output << "]"s;
+    return output;
+}
+
+template <typename T>
+ostream& operator<<(ostream& output, const set<T>& items) {
+    output << "{"s;
+    bool first_item = true;
+    for (const T& item : items) {
+        if (!first_item) {
+            output << ", "s;
+        }
+        output << item;
+        first_item = false;
+    }
+    output << "}"s;
+    return output;
+}
+
+template <typename K, typename V>
+ostream& operator<<(ostream& output, const map<K, V>& items) {
+    output << "{"s;
+    bool first_item = true;
+    for (const auto& [key, value] : items) {
+        if (!first_item) {
+            output << ", "s;
+        }
+        output << key << ": "s << value;
+        first_item = false;
+    }
+    output << "}"s;
+    return output;
+}
 
 template <typename T, typename U>
 void AssertEqualImpl(const T& t, const U& u, const string& t_str, const string& u_str, const string& file,
