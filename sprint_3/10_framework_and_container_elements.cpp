@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-
+#include <vector>
 using namespace std;
 
 template <typename T, typename U>
@@ -23,15 +23,32 @@ void AssertEqualImpl(const T& t, const U& u, const string& t_str, const string& 
 
 #define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
 
-int Sum(int a, int b) {
-    // Ошибка допущена намеренно, чтобы продемонстрировать вывод информации об ошибке
-    return a + b + 1;
+vector<int> TakeEvens(const vector<int>& numbers) {
+    vector<int> evens;
+    for (int x : numbers) {
+        if (x % 2 == 0) {
+            evens.push_back(x);
+        }
+    }
+    return evens;
+}
+
+vector<int> TakePositives(const vector<int>& numbers) {
+    vector<int> positives;
+    for (int x : numbers) {
+        // Ошибка допущена намеренно, чтобы продемонстрировать вывод при несработавшем AssertEqual
+        if (x >= 0) {
+            positives.push_back(x);
+        }
+    }
+    return positives;
 }
 
 int main() {
-    string hello = "hello"s;
-    ASSERT_EQUAL(hello.length(), 5);
+    const vector<int> numbers = {1, 0, 2, -3, 6, 2, 4, 3};
+    const vector<int> expected_evens = {0, 2, 6, 2, 4};
+    ASSERT_EQUAL(TakeEvens(numbers), expected_evens);
 
-    // Эта проверка не пройдёт
-    ASSERT_EQUAL_HINT(Sum(2, 2), 4, "Sum() must be correct"s);
+    const vector<int> expected_positives = {1, 2, 6, 2, 4, 3};
+    ASSERT_EQUAL(TakePositives(numbers), expected_positives);
 }
