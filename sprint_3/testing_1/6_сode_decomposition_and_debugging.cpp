@@ -157,15 +157,36 @@ ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
 
 struct StopsForBusResponse {
     // Наполните полями эту структуру
+    vector<string> stops;
+    string bus;
+    map<string, vector<string>> stops_to_buses;
 };
 
 ostream& operator<<(ostream& os, const StopsForBusResponse& r) {
     // Реализуйте эту функцию
+    if (r.stops.empty()) {
+        os << "No bus"s << endl;
+    } else {
+        for (const string& stop : r.stops) {
+            os << "Stop "s << stop << ":"s;
+            if (r.stops_to_buses.at(stop).size() == 1) {
+                os << " no interchange"s;
+            } else {
+                for (const string& other_bus : r.stops_to_buses.at(stop)) {
+                    if (r.bus != other_bus) {
+                        os << " "s << other_bus;
+                    }
+                }
+            }
+            os << endl;
+        }
+    }
     return os;
 }
 
 struct AllBusesResponse {
     // Наполните полями эту структуру
+    map<string, vector<string>> buses_to_stops;
 };
 
 ostream& operator<<(ostream& os, const AllBusesResponse& r) {
@@ -198,6 +219,13 @@ public:
 
     StopsForBusResponse GetStopsForBus(const string& bus) const {
         // Реализуйте этот метод
+        StopsForBusResponse response;
+        if (buses_to_stops_.count(bus) != 0) {
+            response.stops = buses_to_stops_.at(bus);
+            response.bus = bus;
+            response.stops_to_buses = stops_to_buses_;
+        }
+        return response;
     }
 
     AllBusesResponse GetAllBuses() const {
