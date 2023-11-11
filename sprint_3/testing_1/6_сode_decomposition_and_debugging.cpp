@@ -108,6 +108,7 @@ struct Query {
     vector<string> stops;
 };
 
+
 istream& operator>>(istream& is, Query& q) {
     string operation_code;
     is >> operation_code;
