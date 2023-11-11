@@ -140,7 +140,7 @@ struct BusesForStopResponse {
 ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
     // Реализуйте эту функцию
     if (r.buses.empty()) {
-        os << "No stop"s << endl;
+        os << "No stop"s;
     } else {
         bool is_first = true;
         for (const string& bus : r.buses) {
@@ -150,7 +150,6 @@ ostream& operator<<(ostream& os, const BusesForStopResponse& r) {
             is_first = false;
             os << bus;
         }
-        os << endl;
     }
     return os;
 }
@@ -165,9 +164,14 @@ struct StopsForBusResponse {
 ostream& operator<<(ostream& os, const StopsForBusResponse& r) {
     // Реализуйте эту функцию
     if (r.stops.empty()) {
-        os << "No bus"s << endl;
+        os << "No bus"s;
     } else {
+        bool is_first = true;
         for (const string& stop : r.stops) {
+            if(!is_first){
+                os << endl;
+            }
+            is_first = false;
             os << "Stop "s << stop << ":"s;
             if (r.stops_to_buses.at(stop).size() == 1) {
                 os << " no interchange"s;
@@ -178,7 +182,6 @@ ostream& operator<<(ostream& os, const StopsForBusResponse& r) {
                     }
                 }
             }
-            os << endl;
         }
     }
     return os;
@@ -192,16 +195,20 @@ struct AllBusesResponse {
 ostream& operator<<(ostream& os, const AllBusesResponse& r) {
     // Реализуйте эту функцию
     if (r.buses_to_stops.empty()) {
-        os << "No buses"s << endl;
+        os << "No buses"s;
     } else {
+        bool is_first = true;
         for (const auto& bus_item : r.buses_to_stops) {
+            if(!is_first){
+                os << endl;
+            }
+            is_first = false;
             os << "Bus "s << bus_item.first << ":"s;
             for (const string& stop : bus_item.second) {
                 os << " "s << stop;
             }
-            os << endl;
         }
-        }
+    }
     return os;
 }
 
