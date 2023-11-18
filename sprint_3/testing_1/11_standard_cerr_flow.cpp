@@ -106,15 +106,6 @@ vector<int> TakePositives(const vector<int>& numbers) {
     return positives;
 }
 
-int main() {
-    const vector<int> numbers = {1, 0, 2, -3, 6, 2, 4, 3};
-    const vector<int> expected_evens = {0, 2, 6, 2, 4};
-    ASSERT_EQUAL(TakeEvens(numbers), expected_evens);
-
-    const vector<int> expected_positives = {1, 2, 6, 2, 4, 3};
-    ASSERT_EQUAL(TakePositives(numbers), expected_positives);
-}
-
 
 // Пример запуска теста
 
@@ -130,6 +121,16 @@ void TestAreSynonyms() {
     cerr << "TestAreSynonyms OK"s << endl;
 }
 
+void TestAddingTakePositives() {
+    const vector<int> numbers = {1, 0, 2, -3, 6, 2, 4, 3};
+    const vector<int> expected_evens = {0, 2, 6, 2, 4};
+    ASSERT_EQUAL(TakeEvens(numbers), expected_evens);
+    cerr << "TestAddingTakePositives OK"s << endl;
+
+    const vector<int> expected_positives = {1, 2, 6, 2, 4, 3};
+    ASSERT_EQUAL(TakePositives(numbers), expected_positives);
+}
+
 
 template <typename TestFunc>
 void RunTestImpl(const TestFunc& func, const string& test_name) {
@@ -137,4 +138,12 @@ void RunTestImpl(const TestFunc& func, const string& test_name) {
     cerr << test_name << " OK"s << endl;
 }
 
+
 #define RUN_TEST(func) RunTestImpl(func, #func)
+
+
+int main() {
+    RUN_TEST(TestAddingSynonymsIncreasesTheirCount);
+    RUN_TEST(TestAreSynonyms);
+    RUN_TEST(TestAddingTakePositives);
+}
