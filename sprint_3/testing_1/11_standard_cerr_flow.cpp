@@ -112,20 +112,20 @@ vector<int> TakePositives(const vector<int>& numbers) {
 void TestAddingSynonymsIncreasesTheirCount() {
     // ...
 
-    cerr << "TestAddingSynonymsIncreasesTheirCount OK"s << endl;
+    // cerr << "TestAddingSynonymsIncreasesTheirCount OK"s << endl; 
 }
 
 void TestAreSynonyms() {
     // ...
 
-    cerr << "TestAreSynonyms OK"s << endl;
+    // cerr << "TestAreSynonyms OK"s << endl;
 }
 
 void TestAddingTakePositives() {
     const vector<int> numbers = {1, 0, 2, -3, 6, 2, 4, 3};
     const vector<int> expected_evens = {0, 2, 6, 2, 4};
     ASSERT_EQUAL(TakeEvens(numbers), expected_evens);
-    cerr << "TestAddingTakePositives OK"s << endl;
+    cerr << "Part one OK"s << endl;
 
     const vector<int> expected_positives = {1, 2, 6, 2, 4, 3};
     ASSERT_EQUAL(TakePositives(numbers), expected_positives);
