@@ -529,6 +529,12 @@ void TestCountingRelevansIsCorrect(){
 // Функция TestSearchServer является точкой входа для запуска тестов
 void TestSearchServer() {
     RUN_TEST(TestExcludeStopWordsFromAddedDocumentContent);
+    RUN_TEST(TestExcludeMinusWordsFromAddedDocumentContent);
+    RUN_TEST(TestSortRating);
+    RUN_TEST(TestComputeAverageRating);
+    RUN_TEST(TestPredicate);
+    RUN_TEST(TestStatus);
+    RUN_TEST(TestCountingRelevansIsCorrect);
     // Не забудьте вызывать остальные тесты здесь
 }
 
