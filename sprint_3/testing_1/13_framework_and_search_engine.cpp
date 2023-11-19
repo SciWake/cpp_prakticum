@@ -243,7 +243,7 @@ private:
 };
 
 // ==================== для примера =========================
-
+/*
 void PrintDocument(const Document& document) {
     cout << "{ "s
          << "document_id = "s << document.id << ", "s
@@ -274,7 +274,7 @@ int main() {
     }
     return 0;
 }
-
+*/
 
 
 /*
