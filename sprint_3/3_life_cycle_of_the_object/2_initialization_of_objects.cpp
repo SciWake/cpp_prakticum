@@ -1,10 +1,13 @@
 #include <iostream>
 using namespace std;
 
-using namespace std;
-
 class Rational {
 public:
+    Rational() {
+        numerator_ = 0;
+        denominator_ = 1;
+    }
+    
     int Numerator() const {
         return numerator_;
     }
