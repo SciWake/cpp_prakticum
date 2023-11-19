@@ -1,11 +1,18 @@
 {
     "configurations": [
         {
-            "name": "C/C++: g++ сборка и отладка активного файла",
+            "name": "C/C++: g++ build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": [],
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-Wall",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -13,17 +20,17 @@
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "Включить автоматическое форматирование для gdb",
+                    "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 },
                 {
-                    "description": "Задать для варианта приложения дизассемблирования значение Intel",
+                    "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: g++ сборка активного файла",
+            "preLaunchTask": "C/C++: g++ build active file",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ],
