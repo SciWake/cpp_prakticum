@@ -299,7 +299,7 @@ void AssertEqualImpl(const T& t, const U& u, const string& t_str, const string& 
 }
 
 #define ASSERT_EQUAL(a, b) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, ""s)
-//#define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
+#define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
 
 
 void AssertImpl(bool value, const string& expr_str, const string& file, const string& func, unsigned line,
@@ -315,9 +315,17 @@ void AssertImpl(bool value, const string& expr_str, const string& file, const st
     }
 }
 
-//#define ASSERT(expr) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, ""s)
+#define ASSERT(expr) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, ""s)
 #define ASSERT_HINT(expr, hint) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, (hint))
 
+
+template <typename TestFunc>
+void RunTestImpl(const TestFunc& func, const string& test_name) {
+    func();
+    cerr << test_name << " OK"s << endl;
+}
+
+#define RUN_TEST(func) RunTestImpl(func, #func)
 
 
 // -------- Начало модульных тестов поисковой системы ----------
