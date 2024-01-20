@@ -10,12 +10,12 @@ enum class AnimalType {
 
 class Animal {
 public:
-    Animal(AnimalType type, string name, string owner_name) {
+    Animal(AnimalType type, const string& name, const string& owner_name) {
         type_ = type;
         name_ = name;
         owner_name_ = owner_name;
     }
-    
+
     AnimalType GetType() const {
         return type_;
     }
