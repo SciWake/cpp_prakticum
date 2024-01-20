@@ -4,29 +4,22 @@
 
 using namespace std;
 
+
 class Rational {
 public:
     Rational() = default;
-    
+
     Rational(int numerator) {
         numerator_ = numerator;
         denominator_ = 1;
     }
-    
+
     Rational(int numerator, int denominator) {
         numerator_ = numerator;
         denominator_ = denominator;
-        if (denominator_ < 0) {
-            denominator_ *= -1;
-            numerator_ *= -1;
-        }
-        int gcd_num = gcd(numerator_, denominator_);
-        if (gcd_num != 0) {
-            numerator_ /= gcd_num;
-            denominator_ /= gcd_num;
-        }
+        Normalize();
     }
-    
+
     int Numerator() const {
         return numerator_;
     }
@@ -36,6 +29,16 @@ public:
     }
 
 private:
+    void Normalize() {
+        if (denominator_ < 0) {
+            numerator_ = -numerator_;
+            denominator_ = -denominator_;
+        }
+        const int divisor = gcd(numerator_, denominator_);
+        numerator_ /= divisor;
+        denominator_ /= divisor;
+    }
+
     int numerator_ = 0;
     int denominator_ = 1;
 };
