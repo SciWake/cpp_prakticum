@@ -60,10 +60,16 @@ enum class DocumentStatus {
 
 class SearchServer {
 public:
-    void SetStopWords(const string& text) {
-        for (const string& word : SplitIntoWords(text)) {
+    SearchServer() = default;
+    template <typename StringCollection>
+    explicit SearchServer(const StringCollection& stop_words) {
+        for (const string& word: stop_words) {
             stop_words_.insert(word);
         }
+    }
+
+    explicit SearchServer(const string& stop_words) {
+        SetStopWordsFromString(stop_words);
     }
 
     void AddDocument(int document_id, const string& document, DocumentStatus status,
@@ -133,6 +139,12 @@ public:
     }
 
 private:
+    void SetStopWordsFromString(const string& text) {
+        for (const string& word : SplitIntoWords(text)) {
+            stop_words_.insert(word);
+        }
+    }
+
     struct DocumentData {
         int rating;
         DocumentStatus status;
@@ -253,8 +265,17 @@ void PrintDocument(const Document& document) {
 
 
 int main() {
-    SearchServer search_server;
-    search_server.SetStopWords("и в на"s);
+    // инициализируем поисковую систему, передавая стоп-слова в контейнере vector
+    const vector<string> stop_words_vector = {"и"s, "в"s, "на"s, ""s, "в"s};
+    SearchServer search_server1(stop_words_vector);
+    // инициализируем поисковую систему передавая стоп-слова в контейнере set
+    const set<string> stop_words_set = {"и"s, "в"s, "на"s};
+    SearchServer search_server2(stop_words_set);
+    // инициализируем поисковую систему строкой со стоп-словами, разделёнными пробелами
+    SearchServer search_server("  и  в на   "s); 
+
+
+    // search_server.SetStopWords("и в на"s);
     search_server.AddDocument(0, "белый кот и модный ошейник"s,        DocumentStatus::ACTUAL, {8, -3});
     search_server.AddDocument(1, "пушистый кот пушистый хвост"s,       DocumentStatus::ACTUAL, {7, 2, 7});
     search_server.AddDocument(2, "ухоженный пёс выразительные глаза"s, DocumentStatus::ACTUAL, {5, -12, 2, 1});
