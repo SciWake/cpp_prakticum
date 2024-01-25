@@ -55,3 +55,29 @@ istream& operator>>(istream& input, Rational& rational) {
     rational = Rational{numerator, denominator};
     return input;
 }
+
+Rational operator+(Rational left, Rational right) {
+    const int numerator = left.Numerator() * right.Denominator() + right.Numerator() * left.Denominator();
+    const int denominator = left.Denominator() * right.Denominator();
+
+    return {numerator, denominator};
+}
+
+Rational operator-(Rational left, Rational right) {
+    const int numerator = left.Numerator() * right.Denominator() - right.Numerator() * left.Denominator();
+    const int denominator = left.Denominator() * right.Denominator();
+
+    return {numerator, denominator};
+}
+
+int main() {
+    Rational zero;     // Дробь 0/1 = 0
+    const Rational seven(-7); // Дробь 7/1 = 7
+    cout << seven << endl;
+    // cin >> zero;
+    // cout << zero << endl;
+    const Rational one_third(5, 3); // Дробь 1/3
+    Rational sum = Rational{4, 7} - one_third;
+    // Выведет 1/2
+    cout << sum.Numerator() << "/" << sum.Denominator();
+}
