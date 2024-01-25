@@ -44,15 +44,16 @@ private:
 };
 
 ostream& operator<<(ostream& output, Rational rational) {
-    output << rational.Numerator() << '/' << rational.Denominator();
-    return output;
+    return output << rational.Numerator() << '/' << rational.Denominator();
 }
 
 istream& operator>>(istream& input, Rational& rational) {
-    int numerator, denominator;
+    int numerator;
+    int denominator;
     char slash;
-    input >> numerator >> slash >> denominator;
-    rational = Rational{numerator, denominator};
+    if ((input >> numerator) && (input >> slash) && (slash == '/') && (input >> denominator)) {
+        rational = Rational{numerator, denominator};
+    }
     return input;
 }
 
