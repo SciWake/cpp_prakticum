@@ -18,6 +18,7 @@ public:
         , denominator_(denominator)
     {
         Normalize();
+        cout << "ss"s << endl;
     }
 
     int Numerator() const {
@@ -92,12 +93,12 @@ Rational operator+(Rational left, Rational right) {
     return {numerator, denominator};
 }
 
-// Rational operator-(Rational left, Rational right) {
-//     const int numerator = left.Numerator() * right.Denominator() - right.Numerator() * left.Denominator();
-//     const int denominator = left.Denominator() * right.Denominator();
+Rational operator-(Rational left, Rational right) {
+    const int numerator = left.Numerator() * right.Denominator() - right.Numerator() * left.Denominator();
+    const int denominator = left.Denominator() * right.Denominator();
 
-//     return {numerator, denominator};
-// }
+    return {numerator, denominator};
+}
 
 Rational operator+(Rational value) {
     return value;
@@ -107,18 +108,14 @@ Rational operator-(Rational value) {
     return {-value.Numerator(), value.Denominator()};
 }
 
-Rational operator-(Rational left, Rational right) {
-    return left + (-right);
-}
 
 int main() {
     Rational zero;     // Дробь 0/1 = 0
-    const Rational seven(-7); // Дробь 7/1 = 7
+    Rational seven(-7); // Дробь 7/1 = 7
     cout << seven << endl;
     // cin >> zero;
     // cout << zero << endl;
-    const Rational one_third(5, 3); // Дробь 1/3
+    Rational one_third(5, 3); // Дробь 1/3
     Rational sum = Rational{4, 7} - one_third;
-    // Выведет 1/2
     cout << sum.Numerator() << "/" << sum.Denominator();
 }
