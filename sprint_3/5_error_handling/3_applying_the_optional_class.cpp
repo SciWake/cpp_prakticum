@@ -59,7 +59,7 @@ struct Document {
     int rating = 0;
 };
 
-// ОПТИМИЗИРОВАТЬ
+// ОПТИМИЗИРОВАТЬ?
 template <typename StringContainer> 
 set<string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
     set<string> non_empty_strings;
@@ -125,7 +125,7 @@ public:
         }
 
         documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status});
-        documents_index_.emplace_back(document_id); // ОПТИМИЗИРОВАТЬ
+        documents_index_.emplace_back(document_id); // ОПТИМИЗИРОВАТЬ?
         return true;
     }
 
@@ -220,7 +220,7 @@ private:
     const set<string> stop_words_;
     map<string, map<int, double>> word_to_document_freqs_;
     map<int, DocumentData> documents_;
-    vector<int> documents_index_; // ОПТИМИЗИРОВАТЬ
+    vector<int> documents_index_; // ОПТИМИЗИРОВАТЬ?
 
     bool IsStopWord(const string& word) const { // static?
         return stop_words_.count(word) > 0;
@@ -233,7 +233,7 @@ private:
         });
     }
 
-    static bool IsValidMinusWord(const string& word) {
+    static bool IsValidMinusWord(const string& word) { // ОБЪЕДЕНИТЬ С ParseQueryWord?
         if (word.empty()) {
             return false;
         }
