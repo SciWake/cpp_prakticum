@@ -84,6 +84,8 @@ istream& operator>>(istream& input, Rational& rational) {
     return input;
 }
 
+// Unary plus and minus
+
 Rational operator+(Rational value) {
     return value;
 }
@@ -91,6 +93,8 @@ Rational operator+(Rational value) {
 Rational operator-(Rational value) {
     return {-value.Numerator(), value.Denominator()};
 }
+
+// Binary arithmetic operations
 
 Rational operator+(Rational left, Rational right) {
     return left += right;
@@ -106,6 +110,35 @@ Rational operator*(Rational left, Rational right) {
 
 Rational operator/(Rational left, Rational right) {
     return left /= right;
+}
+
+// Comparison operators
+
+bool operator==(Rational left, Rational right) {
+    return left.Numerator() == right.Numerator() &&
+           left.Denominator() == right.Denominator();
+}
+
+bool operator!=(Rational left, Rational right) {
+    return !(left == right);
+}
+
+bool operator<(Rational left, Rational right) {
+    return left.Numerator() * right.Denominator() < 
+           left.Denominator() * right.Numerator();
+}
+
+bool operator>(Rational left, Rational right) {
+    return left.Numerator() * right.Denominator() >
+           left.Denominator() * right.Numerator();
+}
+
+bool operator>=(Rational left, Rational right) {
+    return !(left < right);
+}
+
+bool operator<=(Rational left, Rational right) {
+    return !(left > right);
 }
 
 
