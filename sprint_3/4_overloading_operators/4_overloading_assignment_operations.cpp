@@ -28,6 +28,34 @@ public:
         return denominator_;
     }
 
+    Rational& operator+=(Rational right) {
+        numerator_ = numerator_ * right.denominator_ + right.numerator_ * denominator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator-=(Rational right) {
+        numerator_ = numerator_ * right.denominator_ - right.numerator_ * denominator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator*=(Rational right) {
+        numerator_ *= right.numerator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator/=(Rational right) {
+        numerator_ *= right.denominator_;
+        denominator_ *= right.numerator_;
+        Normalize();
+        return *this;
+    }
+
 private:
     void Normalize() {
         if (denominator_ < 0) {
