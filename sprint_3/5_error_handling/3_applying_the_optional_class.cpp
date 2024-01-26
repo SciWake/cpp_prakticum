@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <utility>
@@ -129,25 +130,22 @@ public:
     }
 
     template <typename DocumentPredicate>
-    [[nodiscard]] bool FindTopDocuments(const string& raw_query, 
-                                        DocumentPredicate document_predicate, 
-                                        vector<Document>& result) const {
+    optional<vector<Document>> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
         if (raw_query.empty()) {
-            return false;
+            return nullopt;
         }
  
         for (const string& word : SplitIntoWords(raw_query)) {
             if (!IsValidWord(word)) {
-                return false;
+                return nullopt;
             }
             if (!IsValidMinusWord(word)) {
-                return false;
+                return nullopt;
             }
         }
  
-        const Query query = ParseQuery(raw_query);
+        const Query query = ParseQuery(raw_query); 
         auto matched_documents = FindAllDocuments(query, document_predicate);
- 
         sort(matched_documents.begin(), matched_documents.end(),
             [](const Document& lhs, const Document& rhs) {
                 const double EPSILON = 1e-6;
@@ -160,21 +158,18 @@ public:
         if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
             matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
         }
-
-        result = matched_documents; // ОПТИМИЗИРОВАТЬ
-        return true;
+        return matched_documents;
     }
 
-    [[nodiscard]] bool FindTopDocuments(const string& raw_query, DocumentStatus status, 
-                                        vector<Document>& result) const {
+    optional<vector<Document>> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
         return FindTopDocuments(raw_query,
             [&status](int document_id, DocumentStatus new_status, int rating) {
                 return new_status == status;
-            }, result);
+            });
     }
     
-     [[nodiscard]] bool FindTopDocuments(const string& raw_query, vector<Document>& result) const {
-        return FindTopDocuments(raw_query, DocumentStatus::ACTUAL, result);
+    optional<vector<Document>> FindTopDocuments(const string& raw_query) const {
+        return FindTopDocuments(raw_query, DocumentStatus::ACTUAL);
     }
     
     int GetDocumentCount() const { // static?
