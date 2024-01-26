@@ -218,6 +218,19 @@ private:
         });
     }
 
+    static bool IsValidMinusWord(const string& word) {
+        if (word.empty()) {
+            return false;
+        }
+        if (word == "-"s) {
+            return false;
+        }
+        if (word[0] == '-' && word[1] == '-') {
+            return false;
+        }
+         return true;
+    }
+
     vector<string> SplitIntoWordsNoStop(const string& text) const {
         vector<string> words;
         for (const string& word : SplitIntoWords(text)) {
