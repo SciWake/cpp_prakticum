@@ -9,8 +9,7 @@ public:
 
     Rational(int numerator)
         : numerator_(numerator)
-        , denominator_(1)
-    {
+        , denominator_(1) {
     }
 
     Rational(int numerator, int denominator)
@@ -18,7 +17,6 @@ public:
         , denominator_(denominator)
     {
         Normalize();
-        cout << "ss"s << endl;
     }
 
     int Numerator() const {
