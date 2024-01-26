@@ -7,8 +7,8 @@ class Rational {
 public:
     Rational() = default;
 
-    Rational(int numerator)
-        : numerator_(numerator)
+    Rational(int value)
+        : numerator_(value)
         , denominator_(1) {
     }
 
@@ -84,26 +84,28 @@ istream& operator>>(istream& input, Rational& rational) {
     return input;
 }
 
-Rational operator+(Rational left, Rational right) {
-    const int numerator = left.Numerator() * right.Denominator() + right.Numerator() * left.Denominator();
-    const int denominator = left.Denominator() * right.Denominator();
-
-    return {numerator, denominator};
-}
-
-Rational operator-(Rational left, Rational right) {
-    const int numerator = left.Numerator() * right.Denominator() - right.Numerator() * left.Denominator();
-    const int denominator = left.Denominator() * right.Denominator();
-
-    return {numerator, denominator};
-}
-
 Rational operator+(Rational value) {
     return value;
 }
 
 Rational operator-(Rational value) {
     return {-value.Numerator(), value.Denominator()};
+}
+
+Rational operator+(Rational left, Rational right) {
+    return left += right;
+}
+
+Rational operator-(Rational left, Rational right) {
+    return left -= right;
+}
+
+Rational operator*(Rational left, Rational right) {
+    return left *= right;
+}
+
+Rational operator/(Rational left, Rational right) {
+    return left /= right;
 }
 
 
