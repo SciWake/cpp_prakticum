@@ -110,12 +110,18 @@ public:
         if (documents_.find(document_id) != documents_.end()) {
             return false;
         }
-
         const vector<string> words = SplitIntoWordsNoStop(document);
+        for (const string&  word : words) {
+            if (!IsValidWord(word)) {
+                return false;
+            }
+        }
+
         const double inv_word_count = 1.0 / words.size();
         for (const string& word : words) {
             word_to_document_freqs_[word][document_id] += inv_word_count;
         }
+
         documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status});
         documents_index_.emplace_back(document_id); // ОПТИМИЗИРОВАТЬ
         return true;
