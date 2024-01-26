@@ -58,7 +58,8 @@ struct Document {
     int rating = 0;
 };
 
-template <typename StringContainer>
+// ОПТИМИЗИРОВАТЬ
+template <typename StringContainer> 
 set<string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
     set<string> non_empty_strings;
     for (const string& str : strings) {
@@ -78,6 +79,11 @@ enum class DocumentStatus {
 
 class SearchServer {
 public:
+    // Defines an invalid document id
+    // You can refer to this constant as SearchServer::INVALID_DOCUMENT_ID
+    inline static constexpr int INVALID_DOCUMENT_ID = -1;
+    SearchServer() = default;
+
     template <typename StringContainer>
     explicit SearchServer(const StringContainer& stop_words)
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words)) {
@@ -89,14 +95,30 @@ public:
     {
     }
 
-    void AddDocument(int document_id, const string& document, DocumentStatus status,
+    int GetDocumentId(int index) const {
+        if ((index >= 0) && (index < static_cast<int>(documents_.size()))) {
+            return documents_index_[index];
+        }
+        return SearchServer::INVALID_DOCUMENT_ID;
+    } 
+
+    [[nodiscard]] bool AddDocument(int document_id, const string& document, DocumentStatus status,
                      const vector<int>& ratings) {
+        if (document_id < 0) {
+            return false;
+        }
+        if (documents_.find(document_id) != documents_.end()) {
+            return false;
+        }
+
         const vector<string> words = SplitIntoWordsNoStop(document);
         const double inv_word_count = 1.0 / words.size();
         for (const string& word : words) {
             word_to_document_freqs_[word][document_id] += inv_word_count;
         }
         documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status});
+        documents_index_.emplace_back(document_id); // ОПТИМИЗИРОВАТЬ
+        return true;
     }
 
     template <typename DocumentPredicate>
@@ -166,6 +188,7 @@ private:
     const set<string> stop_words_;
     map<string, map<int, double>> word_to_document_freqs_;
     map<int, DocumentData> documents_;
+    vector<int> documents_index_; // ОПТИМИЗИРОВАТЬ
 
     bool IsStopWord(const string& word) const {
         return stop_words_.count(word) > 0;
