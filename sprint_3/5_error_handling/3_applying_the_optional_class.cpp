@@ -176,18 +176,17 @@ public:
         return documents_.size();
     }
 
-    [[nodiscard]] bool MatchDocument(const string& raw_query, int document_id, tuple<vector<string>, 
-                                     DocumentStatus>& result) const {
+    optional<tuple<vector<string>, DocumentStatus>> MatchDocument(const string& raw_query, int document_id) const {
         if (raw_query.empty()) {
-            return false;
+            return nullopt;
         }
  
         for (const string& word : SplitIntoWords(raw_query)) {
             if (!IsValidWord(word)) {
-                return false;
+                return nullopt;
             }
             if (!IsValidMinusWord(word)) {
-                return false;
+                return nullopt;
             }
         }
  
@@ -210,9 +209,7 @@ public:
                 break;
             }
         }
- 
-        result = { matched_words, documents_.at(document_id).status };
-        return true;
+        return make_tuple(matched_words, documents_.at(document_id).status);
     }
 
 private:
