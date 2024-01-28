@@ -1,22 +1,21 @@
-#include <numeric>
-#include <vector>
 #include <iostream>
+#include <numeric>
 
 using namespace std;
-
 
 class Rational {
 public:
     Rational() = default;
 
-    Rational(int numerator)
-        : numerator_(numerator)
+    Rational(int value)
+        : numerator_(value)
         , denominator_(1) {
     }
 
     Rational(int numerator, int denominator)
         : numerator_(numerator)
-        , denominator_(denominator) {
+        , denominator_(denominator)
+    {
         Normalize();
     }
 
@@ -28,43 +27,116 @@ public:
         return denominator_;
     }
 
+    Rational& operator+=(Rational right) {
+        numerator_ = numerator_ * right.denominator_ + right.numerator_ * denominator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator-=(Rational right) {
+        numerator_ = numerator_ * right.denominator_ - right.numerator_ * denominator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator*=(Rational right) {
+        numerator_ *= right.numerator_;
+        denominator_ *= right.denominator_;
+        Normalize();
+        return *this;
+    }
+
+    Rational& operator/=(Rational right) {
+        numerator_ *= right.denominator_;
+        denominator_ *= right.numerator_;
+        Normalize();
+        return *this;
+    }
+
 private:
     void Normalize() {
         if (denominator_ < 0) {
             numerator_ = -numerator_;
             denominator_ = -denominator_;
         }
-        const int divisor = gcd(numerator_, denominator_);
-        numerator_ /= divisor;
-        denominator_ /= divisor;
+        int n = gcd(numerator_, denominator_);
+        numerator_ /= n;
+        denominator_ /= n;
     }
 
     int numerator_ = 0;
     int denominator_ = 1;
 };
 
-
-Rational AddRationals(Rational r1, Rational r2) {
-    int numerator = r1.Numerator() * r2.Denominator() + r2.Numerator() * r1.Denominator();
-    int denominator = r1.Denominator() * r2.Denominator();
-
-    // Компилятор знает, что функция возвращает Rational, и неявно
-    // вызывает соответствующий конструктор
-    return {numerator, denominator};
-    // Эта запись в данном контексте аналогична:
-    // return Rational{numerator, denominator};
+ostream& operator<<(ostream& output, Rational rational) {
+    return output << rational.Numerator() << '/' << rational.Denominator();
 }
 
-int main() {
-    Rational zero;     // Дробь 0/1 = 0
-    const Rational seven(7); // Дробь 7/1 = 7
-    const Rational one_third(1, 3); // Дробь 1/3
-    vector<Rational> numbers;
-    numbers.push_back(Rational{7, 8});
-    // Следующие 2 строки эквивалентны - добавляют в numbers дробь 3/1
-    numbers.push_back(Rational{3});
-    numbers.push_back(3);
-    Rational sum = AddRationals(Rational{1,6}, one_third);
-    // Выведет 1/2
-    cout << sum.Numerator() << "/" << sum.Denominator();
+istream& operator>>(istream& input, Rational& rational) {
+    int numerator;
+    int denominator;
+    char slash;
+    if ((input >> numerator) && (input >> slash) && (slash == '/') && (input >> denominator)) {
+        rational = Rational{numerator, denominator};
+    }
+    return input;
+}
+
+// Unary plus and minus
+
+Rational operator+(Rational value) {
+    return value;
+}
+
+Rational operator-(Rational value) {
+    return {-value.Numerator(), value.Denominator()};
+}
+
+// Binary arithmetic operations
+
+Rational operator+(Rational left, Rational right) {
+    return left += right;
+}
+
+Rational operator-(Rational left, Rational right) {
+    return left -= right;
+}
+
+Rational operator*(Rational left, Rational right) {
+    return left *= right;
+}
+
+Rational operator/(Rational left, Rational right) {
+    return left /= right;
+}
+
+// Comparison operators
+
+bool operator==(Rational left, Rational right) {
+    return left.Numerator() == right.Numerator() &&
+           left.Denominator() == right.Denominator();
+}
+
+bool operator!=(Rational left, Rational right) {
+    return !(left == right);
+}
+
+bool operator<(Rational left, Rational right) {
+    return left.Numerator() * right.Denominator() < 
+           left.Denominator() * right.Numerator();
+}
+
+bool operator>(Rational left, Rational right) {
+    return left.Numerator() * right.Denominator() >
+           left.Denominator() * right.Numerator();
+}
+
+bool operator>=(Rational left, Rational right) {
+    return !(left < right);
+}
+
+bool operator<=(Rational left, Rational right) {
+    return !(left > right);
 }
