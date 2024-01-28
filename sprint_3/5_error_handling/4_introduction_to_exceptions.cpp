@@ -140,3 +140,22 @@ bool operator>=(Rational left, Rational right) {
 bool operator<=(Rational left, Rational right) {
     return !(left > right);
 }
+
+
+int main() {
+    try {
+        const Rational three_fifth{3, 5};
+        const Rational zero;
+        cout << three_fifth << " / " << zero << " = " << (three_fifth / zero) << endl;
+    } catch (const invalid_argument& e) {
+        cout << "Ошибка: "s << e.what() << endl;
+    }
+    try {
+        Rational value{3, 5};
+        value /= Rational();
+        // Следующая строка не должна выполниться
+        cout << value << endl;
+    } catch (const invalid_argument& e) {
+        cout << "Ошибка: "s << e.what() << endl;
+    }
+}
