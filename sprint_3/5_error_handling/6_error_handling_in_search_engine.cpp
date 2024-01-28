@@ -103,8 +103,7 @@ public:
         return SearchServer::INVALID_DOCUMENT_ID;
     } 
 
-    [[nodiscard]] bool AddDocument(int document_id, const string& document, 
-                                   DocumentStatus status,
+    [[nodiscard]] bool AddDocument(int document_id, const string& document, DocumentStatus status,
                                    const vector<int>& ratings) {
         if (document_id < 0) {
             return false;
@@ -243,7 +242,7 @@ private:
         if (word[0] == '-' && word[1] == '-') {
             return false;
         }
-         return true;
+        return true;
     }
 
     vector<string> SplitIntoWordsNoStop(const string& text) const {
@@ -309,8 +308,7 @@ private:
     }
 
     template <typename DocumentPredicate>
-    vector<Document> FindAllDocuments(const Query& query,
-                                      DocumentPredicate document_predicate) const {
+    vector<Document> FindAllDocuments(const Query& query, DocumentPredicate document_predicate) const {
         map<int, double> document_to_relevance;
         for (const string& word : query.plus_words) {
             if (word_to_document_freqs_.count(word) == 0) {
