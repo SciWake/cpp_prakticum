@@ -88,6 +88,8 @@ istream& operator>>(istream& input, Rational& rational) {
     return input;
 }
 
+// Unary plus and minus
+
 Rational operator+(Rational value) {
     return value;
 }
@@ -95,6 +97,8 @@ Rational operator+(Rational value) {
 Rational operator-(Rational value) {
     return {-value.Numerator(), value.Denominator()};
 }
+
+// Binary arithmetic operations
 
 Rational operator+(Rational left, Rational right) {
     return left += right;
@@ -112,8 +116,11 @@ Rational operator/(Rational left, Rational right) {
     return left /= right;
 }
 
+// Comparison operators
+
 bool operator==(Rational left, Rational right) {
-    return left.Numerator() == right.Numerator() && left.Denominator() == right.Denominator();
+    return left.Numerator() == right.Numerator() &&
+           left.Denominator() == right.Denominator();
 }
 
 bool operator!=(Rational left, Rational right) {
@@ -121,11 +128,13 @@ bool operator!=(Rational left, Rational right) {
 }
 
 bool operator<(Rational left, Rational right) {
-    return left.Numerator() * right.Denominator() < left.Denominator() * right.Numerator();
+    return left.Numerator() * right.Denominator() < 
+           left.Denominator() * right.Numerator();
 }
 
 bool operator>(Rational left, Rational right) {
-    return left.Numerator() * right.Denominator() > left.Denominator() * right.Numerator();
+    return left.Numerator() * right.Denominator() >
+           left.Denominator() * right.Numerator();
 }
 
 bool operator>=(Rational left, Rational right) {
@@ -144,15 +153,14 @@ int main() {
         const Rational zero;
         cout << three_fifth << " / " << zero << " = " << (three_fifth / zero) << endl;
     } catch (const invalid_argument& e) {
-        cout << "ошибка: "s << e.what() << endl;
+        cout << "Ошибка: "s << e.what() << endl;
     }
-
     try {
         Rational value{3, 5};
         value /= Rational();
-        // следующая строка не должна выполниться
+        // Следующая строка не должна выполниться
         cout << value << endl;
     } catch (const invalid_argument& e) {
-        cout << "ошибка: "s << e.what() << endl;
+        cout << "Ошибка: "s << e.what() << endl;
     }
 }
