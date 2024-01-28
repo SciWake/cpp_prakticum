@@ -49,6 +49,9 @@ public:
     }
 
     Rational& operator/=(Rational right) {
+        if (right.numerator_ == 0) {
+            throw std::invalid_argument("Деление на ноль"s);
+        }
         numerator_ *= right.denominator_;
         denominator_ *= right.numerator_;
         Normalize();
