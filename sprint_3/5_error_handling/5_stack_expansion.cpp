@@ -149,18 +149,12 @@ bool operator<=(Rational left, Rational right) {
 
 int main() {
     try {
-        const Rational three_fifth{3, 5};
-        const Rational zero;
-        cout << three_fifth << " / " << zero << " = " << (three_fifth / zero) << endl;
-    } catch (const invalid_argument& e) {
-        cout << "Ошибка: "s << e.what() << endl;
-    }
-    try {
-        Rational value{3, 5};
-        value /= Rational();
+        // При попытке сконструировать дробь с нулевым знаменателем
+        // должно выброситься исключение domain_error
+        const Rational invalid_value{1, 0};
         // Следующая строка не должна выполниться
-        cout << value << endl;
-    } catch (const invalid_argument& e) {
+        cout << invalid_value << endl;
+    } catch (const domain_error& e) {
         cout << "Ошибка: "s << e.what() << endl;
     }
 }
