@@ -17,6 +17,9 @@ public:
     Rational(int numerator, int denominator)
         : numerator_(numerator)
         , denominator_(denominator) {
+        if (denominator_ == 0) {
+            throw domain_error("Error: denominator == 0"s);
+        }
         Normalize();
     }
 
