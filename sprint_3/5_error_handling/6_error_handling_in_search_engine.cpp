@@ -344,27 +344,38 @@ void PrintDocument(const Document& document) {
     cout << "{ "s
          << "document_id = "s << document.id << ", "s
          << "relevance = "s << document.relevance << ", "s
-         << "rating = "s << document.rating << " }"s << endl;
+         << "rating = "s << document.rating
+         << " }"s << endl;
 }
+
+
 int main() {
-    SearchServer search_server("и в на"s);
-    // Явно игнорируем результат метода AddDocument, чтобы избежать предупреждения
-    // о неиспользуемом результате его вызова
-    (void) search_server.AddDocument(1, "пушистый кот пушистый хвост"s, DocumentStatus::ACTUAL, {7, 2, 7});
-    if (!search_server.AddDocument(1, "пушистый пёс и модный ошейник"s, DocumentStatus::ACTUAL, {1, 2})) {
-        cout << "Документ не был добавлен, так как его id совпадает с уже имеющимся"s << endl;
+    // инициализируем поисковую систему, передавая стоп-слова в контейнере vector
+    const vector<string> stop_words_vector = {"и"s, "в"s, "на"s, ""s, "в"s};
+    SearchServer search_server1(stop_words_vector);
+    // инициализируем поисковую систему передавая стоп-слова в контейнере set
+    const set<string> stop_words_set = {"и"s, "в"s, "на"s};
+    SearchServer search_server2(stop_words_set);
+    // инициализируем поисковую систему строкой со стоп-словами, разделёнными пробелами
+    SearchServer search_server("  и  в на   "s); 
+
+
+    // search_server.SetStopWords("и в на"s);
+    search_server.AddDocument(0, "белый кот и модный ошейник"s,        DocumentStatus::ACTUAL, {8, -3});
+    search_server.AddDocument(1, "пушистый кот пушистый хвост"s,       DocumentStatus::ACTUAL, {7, 2, 7});
+    search_server.AddDocument(2, "ухоженный пёс выразительные глаза"s, DocumentStatus::ACTUAL, {5, -12, 2, 1});
+    search_server.AddDocument(3, "ухоженный скворец евгений"s,         DocumentStatus::BANNED, {9});
+    cout << "ACTUAL by default:"s << endl;
+    for (const Document& document : search_server.FindTopDocuments("пушистый ухоженный кот"s)) {
+        PrintDocument(document);
     }
-    if (!search_server.AddDocument(-1, "пушистый пёс и модный ошейник"s, DocumentStatus::ACTUAL, {1, 2})) {
-        cout << "Документ не был добавлен, так как его id отрицательный"s << endl;
+    cout << "BANNED:"s << endl;
+    for (const Document& document : search_server.FindTopDocuments("пушистый ухоженный кот"s, DocumentStatus::BANNED)) {
+        PrintDocument(document);
     }
-    if (!search_server.AddDocument(3, "большой пёс скво\x12рец"s, DocumentStatus::ACTUAL, {1, 3, 2})) {
-        cout << "Документ не был добавлен, так как содержит спецсимволы"s << endl;
+    cout << "Even ids:"s << endl;
+    for (const Document& document : search_server.FindTopDocuments("пушистый ухоженный кот"s, [](int document_id, DocumentStatus status, int rating) { return document_id % 2 == 0; })) {
+        PrintDocument(document);
     }
-    if (const auto documents = search_server.FindTopDocuments("--пушистый"s)) {
-        for (const Document& document : *documents) {
-            PrintDocument(document);
-        }
-    } else {
-        cout << "Ошибка в поисковом запросе"s << endl;
-    }
+    return 0;
 }
