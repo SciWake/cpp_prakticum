@@ -130,6 +130,7 @@ public:
 
     template <typename DocumentPredicate>
     vector<Document> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
+        // ЭТОТ БЛОК ПОВТОРЯЕТСЯ НЕСКОЛЬКО РАЗ -- КАК ОПТИМИЗИРОВАТЬ?
         if (raw_query.empty()) {
             throw invalid_argument("Empty search query"s);
         }
@@ -175,6 +176,7 @@ public:
     }
 
     tuple<vector<string>, DocumentStatus> MatchDocument(const string& raw_query, int document_id) const {
+        // ЭТОТ БЛОК ПОВТОРЯЕТСЯ НЕСКОЛЬКО РАЗ -- КАК ОПТИМИЗИРОВАТЬ?
         if (raw_query.empty()) {
             throw invalid_argument("Empty search query"s);
         }
