@@ -88,11 +88,14 @@ public:
     template <typename StringContainer>
     explicit SearchServer(const StringContainer& stop_words)
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words)) {
+        if (all_of(stop_words.begin(), stop_words.end(), IsValidWord)) 
+        {} else {
+            throw invalid_argument("Invalid characters"s);
+        }
     }
 
     explicit SearchServer(const string& stop_words_text)
-        : SearchServer(
-            SplitIntoWords(stop_words_text))  // Invoke delegating constructor from string container
+        : SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor from string container
     {
     }
 
