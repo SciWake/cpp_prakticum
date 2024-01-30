@@ -174,17 +174,16 @@ public:
         return static_cast<int>(documents_.size());
     }
 
-    optional<tuple<vector<string>, DocumentStatus>> MatchDocument(const string& raw_query, int document_id) const {
+    tuple<vector<string>, DocumentStatus> MatchDocument(const string& raw_query, int document_id) const {
         if (raw_query.empty()) {
-            return nullopt;
+            throw invalid_argument("Empty search query"s);
         }
- 
+        if (!IsValidWord(raw_query)) {
+            throw invalid_argument("Invalid characters"s);
+        }
         for (const string& word : SplitIntoWords(raw_query)) {
-            if (!IsValidWord(word)) {
-                return nullopt;
-            }
             if (!IsValidMinusWord(word)) {
-                return nullopt;
+                throw invalid_argument("No text after the 'minus' character in the search query"s);
             }
         }
  
