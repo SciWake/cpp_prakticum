@@ -171,7 +171,7 @@ public:
     }
     
     int GetDocumentCount() const { // static?
-        return documents_.size();
+        return static_cast<int>(documents_.size());
     }
 
     optional<tuple<vector<string>, DocumentStatus>> MatchDocument(const string& raw_query, int document_id) const {
