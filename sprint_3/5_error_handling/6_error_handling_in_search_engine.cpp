@@ -106,21 +106,19 @@ public:
         return SearchServer::INVALID_DOCUMENT_ID;
     } 
 
-    [[nodiscard]] bool AddDocument(int document_id, const string& document, DocumentStatus status,
-                                   const vector<int>& ratings) {
+    void AddDocument(int document_id, const string& document, DocumentStatus status,
+                     const vector<int>& ratings) {
         if (document_id < 0) {
-            return false;
+            throw invalid_argument("Negative index of the document"s);
         }
-        if (documents_.find(document_id) != documents_.end()) {
-            return false;
+        if (documents_.count(document_id)) {
+            throw invalid_argument("Document with already declared index"s);
         }
+        if (!IsValidWord(document)) {
+            throw invalid_argument("Invalid characters"s);
+        }
+        
         const vector<string> words = SplitIntoWordsNoStop(document);
-        for (const string&  word : words) {
-            if (!IsValidWord(word)) {
-                return false;
-            }
-        }
-
         const double inv_word_count = 1.0 / words.size();
         for (const string& word : words) {
             word_to_document_freqs_[word][document_id] += inv_word_count;
@@ -128,7 +126,6 @@ public:
 
         documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status});
         documents_index_.emplace_back(document_id); // ОПТИМИЗИРОВАТЬ?
-        return true;
     }
 
     template <typename DocumentPredicate>
