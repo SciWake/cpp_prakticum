@@ -129,17 +129,16 @@ public:
     }
 
     template <typename DocumentPredicate>
-    optional<vector<Document>> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
+    vector<Document> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
         if (raw_query.empty()) {
-            return nullopt;
+            throw invalid_argument("Empty search query"s);
         }
- 
+        if (!IsValidWord(word)) {
+            throw invalid_argument("Invalid characters"s);
+        }
         for (const string& word : SplitIntoWords(raw_query)) {
-            if (!IsValidWord(word)) {
-                return nullopt;
-            }
             if (!IsValidMinusWord(word)) {
-                return nullopt;
+                throw invalid_argument("No text after the 'minus' character in the search query"s);
             }
         }
  
@@ -160,14 +159,14 @@ public:
         return matched_documents;
     }
 
-    optional<vector<Document>> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
+    <vector<Document>> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
         return FindTopDocuments(raw_query,
             [&status](int document_id, DocumentStatus new_status, int rating) {
                 return new_status == status;
             });
     }
     
-    optional<vector<Document>> FindTopDocuments(const string& raw_query) const {
+    <vector<Document>> FindTopDocuments(const string& raw_query) const {
         return FindTopDocuments(raw_query, DocumentStatus::ACTUAL);
     }
     
