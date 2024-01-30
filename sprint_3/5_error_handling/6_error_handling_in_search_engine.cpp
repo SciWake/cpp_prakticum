@@ -80,9 +80,6 @@ enum class DocumentStatus {
 
 class SearchServer {
 public:
-    // Defines an invalid document id
-    // You can refer to this constant as SearchServer::INVALID_DOCUMENT_ID
-    inline static constexpr int INVALID_DOCUMENT_ID = -1;
     SearchServer() = default;
 
     template <typename StringContainer>
@@ -100,10 +97,10 @@ public:
     }
 
     int GetDocumentId(int index) const { // static?
-        if ((index >= 0) && (index < static_cast<int>(documents_.size()))) {
-            return documents_index_[index];
+        if (index >= 0 && index < GetDocumentCount()) { 
+            return documents_index_.at(index);
         }
-        return SearchServer::INVALID_DOCUMENT_ID;
+        throw out_of_range("Out of range index"s);
     } 
 
     void AddDocument(int document_id, const string& document, DocumentStatus status,
