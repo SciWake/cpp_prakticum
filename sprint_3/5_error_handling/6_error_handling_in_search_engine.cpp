@@ -133,7 +133,7 @@ public:
         if (raw_query.empty()) {
             throw invalid_argument("Empty search query"s);
         }
-        if (!IsValidWord(word)) {
+        if (!IsValidWord(raw_query)) {
             throw invalid_argument("Invalid characters"s);
         }
         for (const string& word : SplitIntoWords(raw_query)) {
