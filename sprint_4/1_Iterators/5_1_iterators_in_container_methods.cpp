@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -14,13 +13,15 @@ void PrintRange(It range_begin, It range_end) {
     cout << endl;
 }
 
-template <typename It>
-auto MakeVector(It range_begin, It range_end) {
-    return vector(range_begin, range_end);
+template <typename Container, typename Iterator>
+void EraseAndPrint(Container& container, Iterator it) {
+    auto it_to_erased = container.erase(it);
+    PrintRange(container.begin(), it_to_erased);
+    PrintRange(it_to_erased, container.end());
 }
 
 int main() {
-    set<string> unique_langs = {"Python"s, "Java"s, "C#"s, "Ruby"s, "C++"s};
-    vector<string> langs = MakeVector(unique_langs.begin(), unique_langs.end());
-    PrintRange(langs.begin(), langs.end());
-} 
+    vector<string> langs = {"Python"s, "Java"s, "C#"s, "Ruby"s, "C++"s};
+    EraseAndPrint(langs, langs.begin());
+    return 0;
+}
