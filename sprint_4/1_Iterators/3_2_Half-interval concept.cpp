@@ -1,7 +1,6 @@
+#include <algorithm>
 #include <iostream>
-#include <string>
 #include <set>
-#include <vector>
 
 using namespace std;
 
@@ -11,6 +10,15 @@ void PrintRange(It range_begin, It range_end) {
         cout << *it << " "s;
     }
     cout << endl;
+}
+
+template <typename Container, typename Element>
+void FindAndPrint(const Container& container, const Element& element_to_find) {
+    auto it_begin = begin(container);
+    auto it_end = end(container);
+    auto it = find(it_begin, it_end, element_to_find);
+    PrintRange(it_begin, it);
+    PrintRange(it, it_end);
 }
 
 
