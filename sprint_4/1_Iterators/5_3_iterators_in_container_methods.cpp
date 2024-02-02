@@ -14,10 +14,11 @@ void PrintRange(It range_begin, It range_end) {
 }
 
 template <typename Container>
-void EraseAndPrint(Container& container, int position) {
-    auto it_to_erased = container.erase(container.begin() + position);
-    PrintRange(container.begin(), it_to_erased);
-    PrintRange(it_to_erased, container.end());
+void EraseAndPrint(Container& container, int position, int range_begin, int range_end) {
+    container.erase(container.begin() + position);
+    PrintRange(container.begin(), container.end());
+    container.erase(container.begin() + range_begin, container.begin() + range_end);
+    PrintRange(container.begin(), container.end());
 }
 
 int main() {
