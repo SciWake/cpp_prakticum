@@ -13,9 +13,9 @@ void PrintRange(It range_begin, It range_end) {
     cout << endl;
 }
 
-template <typename Container, typename Iterator>
-void EraseAndPrint(Container& container, Iterator it) {
-    auto it_to_erased = container.erase(it);
+template <typename Container>
+void EraseAndPrint(Container& container, int position) {
+    auto it_to_erased = container.erase(container.begin() + position);
     PrintRange(container.begin(), it_to_erased);
     PrintRange(it_to_erased, container.end());
 }
