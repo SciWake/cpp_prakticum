@@ -31,6 +31,19 @@ public:
     }
 
     // вы можете дописывать необходимые для вашего решения методы
+    void MoveDisks(int disks_num, Tower& destination, Tower& buffer) {
+        // наше условие завершения - не осталось больше дисков, чтобы перемещать их
+        if (0 < disks_num) {
+            // сначала отложим все диски, кроме верхнего, на дополнительный
+            // стержень, используя destination в качестве буфера
+            MoveDisks(disks_num - 1, buffer, destination);
+            // переложим оставшийся самый большой диск в destination
+            MoveTopTo(destination);
+            // теперь нам нужно переложить диски, оказавшиеся в буфере,
+            // в destination, используя изначальный стержжень, как буфер
+            buffer.MoveDisks(disks_num - 1, destination, *this);
+        }
+    }
 
 private:
     vector<int> disks_;
@@ -45,10 +58,10 @@ private:
 
 void SolveHanoi(vector<Tower>& towers) {
     int disks_num = towers[0].GetDisksNum();
-
+    towers[0].MoveDisks(disks_num, towers[2], towers[1]);
     // допишите функцию, чтобы на towers[0] было 0 дисков,
     // на towers[1] 0 дисков,
-    // и на towers[2] было disks_num дисков
+    // и на towers[2] было disks_num дисков;
 }
 
 int main() {
