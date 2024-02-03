@@ -19,6 +19,16 @@ string PrintRangeToString(It range_begin, It range_end) {
     return out.str();
 }
 
+template <typename It>
+vector<string> GetPermutations(It range_begin, It range_end) {
+    vector<string> permutations;
+    sort(range_begin, range_end);
+    do {
+        permutations.push_back(PrintRangeToString(range_begin, range_end));
+    } while (next_permutation(range_begin, range_end));
+    return permutations;
+}
+
 
 int main() {
     vector<int> permutation(3);
