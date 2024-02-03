@@ -28,7 +28,6 @@ public:
             cout << e.what() << '\n';
             throw;
         }
-
         disks_.pop_back();
     }
 
@@ -40,6 +39,7 @@ public:
             throw invalid_argument("Невозможно поместить большой диск на маленький");
         } else {
             // допишите этот метод и используйте его в вашем решении
+            disks_.push_back(disk);
         }
     }
 
