@@ -18,6 +18,19 @@ public:
     void SetDisks(int disks_num) {
         FillTower(disks_num);
     }
+    
+    // перемещаем 1 диск с текущей башни на destination
+    void MoveTopTo(Tower& destination) {
+        int top_disk_num = disks_.size() - 1;
+        try {
+            destination.AddToTop(disks_[top_disk_num]);
+        } catch (const invalid_argument& e) {
+            cout << e.what() << '\n';
+            throw;
+        }
+
+        disks_.pop_back();
+    }
 
     // добавляем диск на верх собственной башни
     // обратите внимание на исключение, которое выбрасывается этим методом
