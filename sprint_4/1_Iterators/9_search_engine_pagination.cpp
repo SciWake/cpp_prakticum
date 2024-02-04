@@ -99,8 +99,7 @@ public:
     }
 
     explicit SearchServer(const string& stop_words_text)
-        : SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor
-                                                         // from string container
+        : SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor from string container
     {
     }
 
@@ -306,6 +305,8 @@ private:
     }
 };
 
+
+// ==================== для примера =========================
 void PrintDocument(const Document& document) {
     cout << "{ "s
          << "document_id = "s << document.id << ", "s
