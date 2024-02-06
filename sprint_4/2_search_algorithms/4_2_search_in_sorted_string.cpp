@@ -6,6 +6,17 @@
 
 using namespace std;
 
+
+// template <typename RandomIt>
+// pair<RandomIt, RandomIt> FindStartsWith(RandomIt beginIt, RandomIt endIt, char prefix) {
+//     // получить эквивалент префикса std::equal_range, заданного одним символом
+//     auto lowerBound = std::partition_point(beginIt, endIt, [&](const auto str) { return str.front() < prefix; });
+//     auto upperBound = std::partition_point(beginIt, endIt, [&](const auto str) { return str.front() <= prefix; });
+
+//     return std::pair(lowerBound, upperBound);
+// }
+
+
 template <typename RandomIt>
 pair<RandomIt, RandomIt> FindStartsWith(RandomIt range_begin, RandomIt range_end, char prefix) {
     // Все строки, начинающиеся с '<prefix>', больше или равны строке "<prefix>"
