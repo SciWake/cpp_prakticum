@@ -15,7 +15,7 @@ void PrintRange(It range_begin, It range_end) {
 
 template <typename Type>
 class Stack {
-   public:
+public:
     void Push(const Type& element) {
         elements_.push_back(element);
     }
@@ -38,13 +38,13 @@ class Stack {
         return elements_.empty();
     }
 
-   private:
+private:
     vector<Type> elements_;
 };
 
 template <typename Type>
 class SortedSack {
-   public:
+public:
     void Push(const Type& element) {
         // Если стек пуст, то просто вставляем в него новый элемент.
         if (elements_.IsEmpty()) {
@@ -89,7 +89,7 @@ class SortedSack {
         return elements_.IsEmpty();
     }
 
-   private:
+private:
     Stack<Type> elements_;
 };
 
