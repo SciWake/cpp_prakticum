@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <deque>
 #include <iostream>
 #include <map>
 #include <set>
@@ -277,7 +278,7 @@ private:
                 continue;
             }
             const double inverse_document_freq = ComputeWordInverseDocumentFreq(word);
-            for (const auto [document_id, term_freq] : word_to_document_freqs_.at(word)) {
+            for (const auto& [document_id, term_freq] : word_to_document_freqs_.at(word)) {
                 const auto& document_data = documents_.at(document_id);
                 if (document_predicate(document_id, document_data.status, document_data.rating)) {
                     document_to_relevance[document_id] += term_freq * inverse_document_freq;
@@ -289,13 +290,13 @@ private:
             if (word_to_document_freqs_.count(word) == 0) {
                 continue;
             }
-            for (const auto [document_id, _] : word_to_document_freqs_.at(word)) {
+            for (const auto& [document_id, _] : word_to_document_freqs_.at(word)) {
                 document_to_relevance.erase(document_id);
             }
         }
 
         vector<Document> matched_documents;
-        for (const auto [document_id, relevance] : document_to_relevance) {
+        for (const auto& [document_id, relevance] : document_to_relevance) {
             matched_documents.push_back({document_id, relevance, documents_.at(document_id).rating});
         }
         return matched_documents;
@@ -427,30 +428,56 @@ auto Paginate(const Container& c, size_t page_size) {
 
 class RequestQueue {
 public:
-    explicit RequestQueue(const SearchServer& search_server) {
-        // напишите реализацию
+    explicit RequestQueue(const SearchServer& search_server)
+        : search_server_(search_server), no_results_requests_(0), current_time_(0) {
     }
-    // сделаем "обёртки" для всех методов поиска, чтобы сохранять результаты для нашей статистики
+    // сделаем "обертки" для всех методов поиска, чтобы сохранять результаты для нашей статистики
     template <typename DocumentPredicate>
     vector<Document> AddFindRequest(const string& raw_query, DocumentPredicate document_predicate) {
-        // напишите реализацию
+        const auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
+        AddRequest(result.size());
+        return result;
     }
     vector<Document> AddFindRequest(const string& raw_query, DocumentStatus status) {
-        // напишите реализацию
+        const auto result = search_server_.FindTopDocuments(raw_query, status);
+        AddRequest(result.size());
+        return result;
     }
     vector<Document> AddFindRequest(const string& raw_query) {
-        // напишите реализацию
+        const auto result = search_server_.FindTopDocuments(raw_query);
+        AddRequest(result.size());
+        return result;
     }
     int GetNoResultRequests() const {
-        // напишите реализацию
+        return no_results_requests_;
     }
 private:
     struct QueryResult {
-        // определите, что должно быть в структуре
+        uint64_t timestamp;
+        int result;
     };
     deque<QueryResult> requests_;
+    const SearchServer& search_server_;
+    int no_results_requests_;
+    uint64_t current_time_;
     const static int min_in_day_ = 1440;
-    // возможно, здесь вам понадобится что-то ещё
+
+    void AddRequest(int results_num) {
+        // новый запрос - новая секунда
+        ++current_time_;
+        // удаляем все результаты поиска, которые устарели
+        while (!requests_.empty() && min_in_day_ <= current_time_ - requests_.front().timestamp) {
+            if (0 == requests_.front().result) {
+                --no_results_requests_;
+            }
+            requests_.pop_front();
+        }
+        // сохраняем новый результат поиска
+        requests_.push_back({current_time_, results_num});
+        if (0 == results_num) {
+            ++no_results_requests_;
+        }
+    }
 };
 
 
