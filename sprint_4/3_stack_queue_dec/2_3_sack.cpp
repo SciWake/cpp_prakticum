@@ -44,31 +44,55 @@ class Stack {
 
 template <typename Type>
 class SortedSack {
-public:
+   public:
     void Push(const Type& element) {
-    // напишите реализацию метода
+        // Если стек пуст, то просто вставляем в него новый элемент.
+        if (elements_.IsEmpty()) {
+            elements_.Push(element);
+            return;
+        }
+        // Если в стеке уже есть элементы,
+        // возьмем копию элемента сверху
+        Type last_elem = elements_.Peek();
+        // и сравним ее с элементом, который мы хотим вставить.
+        if (last_elem < element) {
+            // Если при добавлении элемента сортировка будет нарушаться,
+            // вытащим из стека верхний элемент и попытаемся вставить новый элемент
+            // в стек на одну позицию ниже рекурсивно.
+            elements_.Pop();
+            Push(element);
+            // когда вставка удалась (рекурсивный стек начал раскручиваться назад),
+            // нужно вернуть на место тот элемент, который мы из стека доставали.
+            elements_.Push(last_elem);
+        } else {
+            // В этом случае сортировка при вставке не нарушается,
+            // и мы можем смело вставлять элемент сверху стека
+            elements_.Push(element);
+        }
     }
     void Pop() {
-    // напишите реализацию метода
+        elements_.Pop();
     }
     const Type& Peek() const {
-    return elements_.Peek();
+        return elements_.Peek();
     }
     Type& Peek() {
-    return elements_.Peek();
+        return elements_.Peek();
     }
     void Print() const {
-    elements_.Print();
+        elements_.Print();
     }
     uint64_t Size() const {
-    return elements_.Size();
+        return elements_.Size();
     }
     bool IsEmpty() const {
-    return elements_.IsEmpty();
+        return elements_.IsEmpty();
     }
-private:
+
+   private:
     Stack<Type> elements_;
 };
+
 
 int main() {
     SortedSack<int> sack;
