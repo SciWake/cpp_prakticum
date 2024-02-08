@@ -2,6 +2,7 @@
 #include <iostream>
 #include <numeric>
 #include <random>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -18,24 +19,43 @@ template <typename Type>
 class Queue {
 public:
     void Push(const Type& element) {
-        // напишите реализацию
+        // просто вставим элемент в первый стек
+        stack1_.push(element);
     }
     void Pop() {
-        // напишите реализацию
+        // переложим все элементы из первого стека во второй,
+        // так что первый элемент очереди окажется на вершине второго стека
+        MoveElements();
+        // вытащим верхний элемент второго стека
+        stack2_.pop();
     }
     Type& Front() {
-        // напишите реализацию
+        // логика аналогична методу Pop
+        MoveElements();
+        return stack2_.top();
     }
     uint64_t Size() const {
-        // напишите реализацию
+        return stack1_.size() + stack2_.size();
     }
     bool IsEmpty() const {
-        // напишите реализацию
+        return (stack1_.empty() && stack2_.empty());
     }
 
 private:
     stack<Type> stack1_;
     stack<Type> stack2_;
+
+    void MoveElements() {
+        // Перекладывать во второй стек из первого
+        // необходимо только тогда, когда во втором стеке
+        // элементов не осталось. Иначе порядок очереди будет нарушен.
+        if (stack2_.empty()) {
+            while (!stack1_.empty()) {
+                stack2_.push(stack1_.top());
+                stack1_.pop();
+            }
+        }
+    }
 };
 
 int main() {
