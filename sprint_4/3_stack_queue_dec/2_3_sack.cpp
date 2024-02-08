@@ -42,21 +42,6 @@ class Stack {
     vector<Type> elements_;
 };
 
-// используем струкруту из элемента
-// и минимума в стеке до дна стека до текущего элемента включительно
-template <typename Type>
-struct PairWithMin {
-    Type element;
-    Type minimum;
-};
-
-template <typename Type>
-ostream& operator<<(ostream& out, const PairWithMin<Type>& pair_to_print) {
-    // будем выводить только сам элемент, выводить минимум не будем
-    out << pair_to_print.element;
-    return out;
-}
-
 template <typename Type>
 class SortedSack {
 public:
@@ -91,7 +76,7 @@ int main() {
     // заполняем вектор для тестирования нашего класса
     iota(values.begin(), values.end(), 1);
     // перемешиваем значения
-    shuffle(values.begin(), values.end());
+    random_shuffle(values.begin(), values.end());
 
     // заполняем класс и проверяем, что сортировка сохраняется после каждой вставки
     for (int i = 0; i < 5; ++i) {
