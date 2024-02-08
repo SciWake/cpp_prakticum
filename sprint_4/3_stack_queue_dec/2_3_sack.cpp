@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <random>
 #include <vector>
 
 using namespace std;
@@ -100,7 +101,9 @@ int main() {
     // заполняем вектор для тестирования нашего класса
     iota(values.begin(), values.end(), 1);
     // перемешиваем значения
-    random_shuffle(values.begin(), values.end());
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(values.begin(), values.end(), g);
 
     // заполняем класс и проверяем, что сортировка сохраняется после каждой вставки
     for (int i = 0; i < 5; ++i) {
