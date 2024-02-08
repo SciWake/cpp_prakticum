@@ -303,7 +303,6 @@ private:
 };
 
 
-// ==================== для примера =========================
 void PrintDocument(const Document& document) {
     cout << "{ "s
          << "document_id = "s << document.id << ", "s
@@ -425,6 +424,37 @@ auto Paginate(const Container& c, size_t page_size) {
     return Paginator(begin(c), end(c), page_size);
 }
 
+
+class RequestQueue {
+public:
+    explicit RequestQueue(const SearchServer& search_server) {
+        // напишите реализацию
+    }
+    // сделаем "обёртки" для всех методов поиска, чтобы сохранять результаты для нашей статистики
+    template <typename DocumentPredicate>
+    vector<Document> AddFindRequest(const string& raw_query, DocumentPredicate document_predicate) {
+        // напишите реализацию
+    }
+    vector<Document> AddFindRequest(const string& raw_query, DocumentStatus status) {
+        // напишите реализацию
+    }
+    vector<Document> AddFindRequest(const string& raw_query) {
+        // напишите реализацию
+    }
+    int GetNoResultRequests() const {
+        // напишите реализацию
+    }
+private:
+    struct QueryResult {
+        // определите, что должно быть в структуре
+    };
+    deque<QueryResult> requests_;
+    const static int min_in_day_ = 1440;
+    // возможно, здесь вам понадобится что-то ещё
+};
+
+
+// ==================== для примера =========================
 int main() {
     SearchServer search_server("and in at"s);
     RequestQueue request_queue(search_server);
