@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <random>
 #include <vector>
 
 using namespace std;
@@ -104,17 +105,16 @@ private:
 int main() {
     StackMin<int> stack;
     vector<int> values(5);
-
     // заполняем вектор для тестирования нашего стека
     iota(values.begin(), values.end(), 1);
     // перемешиваем значения
-    random_shuffle(values.begin(), values.end());
-
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(values.begin(), values.end(), g);
     // заполняем стек
     for (int i = 0; i < 5; ++i) {
         stack.Push(values[i]);
     }
-
     // печатаем стек и его минимум, постепенно убирая из стека элементы
     while (!stack.IsEmpty()) {
         stack.Print();
