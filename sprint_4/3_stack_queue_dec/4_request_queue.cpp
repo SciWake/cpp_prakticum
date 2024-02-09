@@ -456,7 +456,7 @@ public:
 private:
     struct QueryResult {
         uint64_t timestamp;
-        int result;
+        int results;
     };
     deque<QueryResult> requests_;
     const SearchServer& search_server_;
@@ -469,7 +469,7 @@ private:
         ++current_time_;
         // удаляем все результаты поиска, которые устарели
         while (!requests_.empty() && min_in_day_ <= current_time_ - requests_.front().timestamp) {
-            if (0 == requests_.front().result) {
+            if (0 == requests_.front().results) {
                 --no_results_requests_;
             }
             requests_.pop_front();
