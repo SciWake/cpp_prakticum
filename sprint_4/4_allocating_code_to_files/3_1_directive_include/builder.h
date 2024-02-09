@@ -1,3 +1,5 @@
+#include "wall.h"
+
 class Builder {
 public:
     double CalcBricksNeeded(const Wall& wall) const {
