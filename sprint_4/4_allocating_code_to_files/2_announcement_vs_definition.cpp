@@ -2,6 +2,8 @@
 
 using namespace std;
 
+void Hen();
+void Egg(int x);
 
 void Hen() {
     cout << "Курица вызывает яйцо"s << endl;
