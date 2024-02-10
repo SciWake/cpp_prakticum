@@ -12,7 +12,7 @@ double Wall::GetHeight() const {
 double Wall::GetWidth() const {
     return width_;
 }
-void Wall::SetColor(Wall::Color color) {
+void Wall::SetColor(Color color) {
     color_ = color;
 }
 Wall::Color Wall::GetColor() const {
