@@ -17,8 +17,12 @@ public:
     void SetColor(Color color);
     Color GetColor() const;
 
+    bool IsDoorInstalled() const;
+    void SetDoorInstalled();
+
 private:
     double width_;
     double height_;
     Color color_;
+    bool is_door_installed_;
 };
