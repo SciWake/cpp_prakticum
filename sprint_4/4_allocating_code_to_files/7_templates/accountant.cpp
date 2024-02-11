@@ -2,14 +2,16 @@
 
 #include "square_calculation.h"
 
-double Accountant::CalcPaintNeeded(const Wall& wall) const {
-    double height = wall.GetHeight();
-    double width = wall.GetWidth();
-    return CalcSquare(width, height) * 0.4;
+using namespace std;
+
+template <class BuildingObject>
+double Accountant::CalcPaintNeeded(const BuildingObject& building_object) const {
+    pair<double, double> sizes = building_object.GetSizes();
+    return CalcSquare(sizes.first, sizes.second) * 0.4;
 }
 
-double Accountant::CalcBricksNeeded(const Wall& wall) const {
-    double height = wall.GetHeight();
-    double width = wall.GetWidth();
-    return CalcSquare(width, height) * 5;
+template <class BuildingObject>
+double Accountant::CalcBricksNeeded(const BuildingObject& building_object) const {
+    pair<double, double> sizes = building_object.GetSizes();
+    return CalcSquare(sizes.first, sizes.second) * 5;
 }
