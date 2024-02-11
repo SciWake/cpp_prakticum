@@ -1,22 +1,23 @@
 #include "accountant.h"
-#include "builder.h"
-#include "carpenter.h"
-#include "painter.h"
+#include "ceiling.h"
+#include "roof.h"
 
 #include <iostream>
 
 using namespace std;
 
 int main() {
-    Builder tom;
-    Carpenter jack;
     Accountant ray;
     Wall wall(3.5, 2.45);
+    Roof roof(5, 7);
+    Ceiling ceiling(5, 7);
 
-    cout << ray.CalcBricksNeeded(wall) << endl;
-    cout << ray.CalcPaintNeeded(wall) << endl;
+    cout << "Требуется кирпичей: "s
+         << ray.CalcBricksNeeded<Wall>(wall) + ray.CalcBricksNeeded<Roof>(roof) + ray.CalcBricksNeeded<Ceiling>(ceiling)
+         << endl;
 
-    jack.InstallDoor(wall, tom);
-    cout << wall.IsDoorInstalled() << endl;
-    return 0;
+    cout << "Требуется краски: "s
+         << ray.CalcPaintNeeded<Wall>(wall) + ray.CalcPaintNeeded<Roof>(roof) + ray.CalcPaintNeeded<Ceiling>(ceiling)
+         << endl;
+        return 0;
 }
