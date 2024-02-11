@@ -13,17 +13,18 @@ double Wall::GetHeight() const {
 double Wall::GetWidth() const {
     return width_;
 }
+std::pair<double, double> Wall::GetSizes() const {
+    return {width_, height_};
+}
 void Wall::SetColor(Color color) {
     color_ = color;
 }
-Wall::Color Wall::GetColor() const {
+Color Wall::GetColor() const {
     return color_;
 }
-
 bool Wall::IsDoorInstalled() const {
     return is_door_installed_;
 }
-
 void Wall::SetDoorInstalled() {
     is_door_installed_ = true;
 }
