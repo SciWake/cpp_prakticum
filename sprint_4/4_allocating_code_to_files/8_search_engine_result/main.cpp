@@ -6,25 +6,26 @@
 #include <set>
 #include <stdexcept>
 #include <string>
-#include <utility>
+// #include <utility>
 #include <vector>
+
+
+#include "document.h"
 
 using namespace std;
 
-const int MAX_RESULT_DOCUMENT_COUNT = 5;
+// string ReadLine() {
+//     string s;
+//     getline(cin, s);
+//     return s;
+// }
 
-string ReadLine() {
-    string s;
-    getline(cin, s);
-    return s;
-}
-
-int ReadLineWithNumber() {
-    int result;
-    cin >> result;
-    ReadLine();
-    return result;
-}
+// int ReadLineWithNumber() {
+//     int result;
+//     cin >> result;
+//     ReadLine();
+//     return result;
+// }
 
 vector<string> SplitIntoWords(const string& text) {
     vector<string> words;
@@ -45,27 +46,13 @@ vector<string> SplitIntoWords(const string& text) {
     return words;
 }
 
-struct Document {
-    Document() = default;
-
-    Document(int id, double relevance, int rating)
-        : id(id)
-        , relevance(relevance)
-        , rating(rating) {
-    }
-
-    int id = 0;
-    double relevance = 0.0;
-    int rating = 0;
-};
-
-ostream& operator<<(ostream& out, const Document& document) {
-    out << "{ "s
-        << "document_id = "s << document.id << ", "s
-        << "relevance = "s << document.relevance << ", "s
-        << "rating = "s << document.rating << " }"s;
-    return out;
-}
+// ostream& operator<<(ostream& out, const Document& document) {
+//     out << "{ "s
+//         << "document_id = "s << document.id << ", "s
+//         << "relevance = "s << document.relevance << ", "s
+//         << "rating = "s << document.rating << " }"s;
+//     return out;
+// }
 
 template <typename StringContainer>
 set<string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
@@ -77,13 +64,6 @@ set<string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
     }
     return non_empty_strings;
 }
-
-enum class DocumentStatus {
-    ACTUAL,
-    IRRELEVANT,
-    BANNED,
-    REMOVED,
-};
 
 class SearchServer {
 public:
@@ -300,126 +280,126 @@ private:
 };
 
 
-void PrintDocument(const Document& document) {
-    cout << "{ "s
-         << "document_id = "s << document.id << ", "s
-         << "relevance = "s << document.relevance << ", "s
-         << "rating = "s << document.rating << " }"s << endl;
-}
+// void PrintDocument(const Document& document) {
+//     cout << "{ "s
+//          << "document_id = "s << document.id << ", "s
+//          << "relevance = "s << document.relevance << ", "s
+//          << "rating = "s << document.rating << " }"s << endl;
+// }
 
-void PrintMatchDocumentResult(int document_id, const vector<string>& words, DocumentStatus status) {
-    cout << "{ "s
-         << "document_id = "s << document_id << ", "s
-         << "status = "s << static_cast<int>(status) << ", "s
-         << "words ="s;
-    for (const string& word : words) {
-        cout << ' ' << word;
-    }
-    cout << "}"s << endl;
-}
+// void PrintMatchDocumentResult(int document_id, const vector<string>& words, DocumentStatus status) {
+//     cout << "{ "s
+//          << "document_id = "s << document_id << ", "s
+//          << "status = "s << static_cast<int>(status) << ", "s
+//          << "words ="s;
+//     for (const string& word : words) {
+//         cout << ' ' << word;
+//     }
+//     cout << "}"s << endl;
+// }
 
-void AddDocument(SearchServer& search_server, int document_id, const string& document, DocumentStatus status,
-                 const vector<int>& ratings) {
-    try {
-        search_server.AddDocument(document_id, document, status, ratings);
-    } catch (const invalid_argument& e) {
-        cout << "Ошибка добавления документа "s << document_id << ": "s << e.what() << endl;
-    }
-}
+// void AddDocument(SearchServer& search_server, int document_id, const string& document, DocumentStatus status,
+//                  const vector<int>& ratings) {
+//     try {
+//         search_server.AddDocument(document_id, document, status, ratings);
+//     } catch (const invalid_argument& e) {
+//         cout << "Ошибка добавления документа "s << document_id << ": "s << e.what() << endl;
+//     }
+// }
 
-void FindTopDocuments(const SearchServer& search_server, const string& raw_query) {
-    cout << "Результаты поиска по запросу: "s << raw_query << endl;
-    try {
-        for (const Document& document : search_server.FindTopDocuments(raw_query)) {
-            PrintDocument(document);
-        }
-    } catch (const invalid_argument& e) {
-        cout << "Ошибка поиска: "s << e.what() << endl;
-    }
-}
+// void FindTopDocuments(const SearchServer& search_server, const string& raw_query) {
+//     cout << "Результаты поиска по запросу: "s << raw_query << endl;
+//     try {
+//         for (const Document& document : search_server.FindTopDocuments(raw_query)) {
+//             PrintDocument(document);
+//         }
+//     } catch (const invalid_argument& e) {
+//         cout << "Ошибка поиска: "s << e.what() << endl;
+//     }
+// }
 
-void MatchDocuments(const SearchServer& search_server, const string& query) {
-    try {
-        cout << "Матчинг документов по запросу: "s << query << endl;
-        const int document_count = search_server.GetDocumentCount();
-        for (int index = 0; index < document_count; ++index) {
-            const int document_id = search_server.GetDocumentId(index);
-            const auto [words, status] = search_server.MatchDocument(query, document_id);
-            PrintMatchDocumentResult(document_id, words, status);
-        }
-    } catch (const invalid_argument& e) {
-        cout << "Ошибка матчинга документов на запрос "s << query << ": "s << e.what() << endl;
-    }
-}
+// void MatchDocuments(const SearchServer& search_server, const string& query) {
+//     try {
+//         cout << "Матчинг документов по запросу: "s << query << endl;
+//         const int document_count = search_server.GetDocumentCount();
+//         for (int index = 0; index < document_count; ++index) {
+//             const int document_id = search_server.GetDocumentId(index);
+//             const auto [words, status] = search_server.MatchDocument(query, document_id);
+//             PrintMatchDocumentResult(document_id, words, status);
+//         }
+//     } catch (const invalid_argument& e) {
+//         cout << "Ошибка матчинга документов на запрос "s << query << ": "s << e.what() << endl;
+//     }
+// }
 
-template <typename Iterator>
-class IteratorRange {
-public:
-    IteratorRange(Iterator begin, Iterator end)
-        : first_(begin)
-        , last_(end)
-        , size_(distance(first_, last_)) {
-    }
+// template <typename Iterator>
+// class IteratorRange {
+// public:
+//     IteratorRange(Iterator begin, Iterator end)
+//         : first_(begin)
+//         , last_(end)
+//         , size_(distance(first_, last_)) {
+//     }
 
-    Iterator begin() const {
-        return first_;
-    }
+//     Iterator begin() const {
+//         return first_;
+//     }
 
-    Iterator end() const {
-        return last_;
-    }
+//     Iterator end() const {
+//         return last_;
+//     }
 
-    size_t size() const {
-        return size_;
-    }
+//     size_t size() const {
+//         return size_;
+//     }
 
-private:
-    Iterator first_, last_;
-    size_t size_;
-};
+// private:
+//     Iterator first_, last_;
+//     size_t size_;
+// };
 
-template <typename Iterator>
-ostream& operator<<(ostream& out, const IteratorRange<Iterator>& range) {
-    for (Iterator it = range.begin(); it != range.end(); ++it) {
-        out << *it;
-    }
-    return out;
-}
+// template <typename Iterator>
+// ostream& operator<<(ostream& out, const IteratorRange<Iterator>& range) {
+//     for (Iterator it = range.begin(); it != range.end(); ++it) {
+//         out << *it;
+//     }
+//     return out;
+// }
 
-template <typename Iterator>
-class Paginator {
-public:
-    Paginator(Iterator begin, Iterator end, size_t page_size) {
-        for (size_t left = distance(begin, end); left > 0;) {
-            const size_t current_page_size = min(page_size, left);
-            const Iterator current_page_end = next(begin, current_page_size);
-            pages_.push_back({begin, current_page_end});
+// template <typename Iterator>
+// class Paginator {
+// public:
+//     Paginator(Iterator begin, Iterator end, size_t page_size) {
+//         for (size_t left = distance(begin, end); left > 0;) {
+//             const size_t current_page_size = min(page_size, left);
+//             const Iterator current_page_end = next(begin, current_page_size);
+//             pages_.push_back({begin, current_page_end});
 
-            left -= current_page_size;
-            begin = current_page_end;
-        }
-    }
+//             left -= current_page_size;
+//             begin = current_page_end;
+//         }
+//     }
 
-    auto begin() const {
-        return pages_.begin();
-    }
+//     auto begin() const {
+//         return pages_.begin();
+//     }
 
-    auto end() const {
-        return pages_.end();
-    }
+//     auto end() const {
+//         return pages_.end();
+//     }
 
-    size_t size() const {
-        return pages_.size();
-    }
+//     size_t size() const {
+//         return pages_.size();
+//     }
 
-private:
-    vector<IteratorRange<Iterator>> pages_;
-};
+// private:
+//     vector<IteratorRange<Iterator>> pages_;
+// };
 
-template <typename Container>
-auto Paginate(const Container& c, size_t page_size) {
-    return Paginator(begin(c), end(c), page_size);
-}
+// template <typename Container>
+// auto Paginate(const Container& c, size_t page_size) {
+//     return Paginator(begin(c), end(c), page_size);
+// }
 
 
 class RequestQueue {
