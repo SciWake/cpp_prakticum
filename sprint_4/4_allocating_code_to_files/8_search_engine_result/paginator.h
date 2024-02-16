@@ -1,8 +1,9 @@
 #pragma once
 
-#include <iostream>
 #include <iterator>
+#include <fstream> 
 #include <vector>
+
 
 template <typename Iterator>
 class IteratorRange {
@@ -33,7 +34,7 @@ private:
 template <typename Iterator>
 std::ostream& operator<<(std::ostream& out, const IteratorRange<Iterator>& range) {
     for (Iterator it = range.begin(); it != range.end(); ++it) {
-        out << *it;
+        out << *it; // Overloading operator << in document.cpp file
     }
     return out;
 }
