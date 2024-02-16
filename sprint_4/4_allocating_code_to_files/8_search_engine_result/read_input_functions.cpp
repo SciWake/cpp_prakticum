@@ -3,13 +3,13 @@
 #include <iostream>
 
 
-std::string ReadLine() {
+std::string ReadLine() { // Unused
     std::string s;
     std::getline(std::cin, s);
     return s;
 }
 
-int ReadLineWithNumber() {
+int ReadLineWithNumber() { // Unused
     int result;
     std::cin >> result;
     ReadLine();

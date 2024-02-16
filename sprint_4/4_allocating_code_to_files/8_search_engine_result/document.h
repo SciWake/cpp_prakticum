@@ -7,7 +7,7 @@
 const int MAX_RESULT_DOCUMENT_COUNT = 5;
 struct Document {
     Document() = default;
-    Document(int id, double relevance, int rating);
+    Document(int docId, double docRelevance, int docRating);
 
     int id = 0;
     double relevance = 0.0;

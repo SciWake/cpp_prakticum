@@ -32,7 +32,7 @@ int main() {
     
     // Выводим результаты поиска страницами
     const auto search_results = search_server.FindTopDocuments("big dog"s);
-    int page_size = 2;
+    size_t page_size = 2;
     const auto pages = Paginate(search_results, page_size);
 
     // Выводим найденные документы по страницам

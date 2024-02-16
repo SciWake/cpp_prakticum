@@ -16,7 +16,7 @@ void SearchServer::AddDocument(int document_id, const std::string& document, Doc
     }
 
     const auto words = SplitIntoWordsNoStop(document);
-    const double inv_word_count = 1.0 / words.size();
+    const double inv_word_count = 1.0 / static_cast<int>(words.size());
     for (const std::string& word : words) {
         word_to_document_freqs_[word][document_id] += inv_word_count;
     }
@@ -35,7 +35,7 @@ std::vector<Document> SearchServer::FindTopDocuments(const std::string& raw_quer
 }
 
 int SearchServer::GetDocumentCount() const {
-    return documents_.size();
+    return static_cast<int>(documents_.size());
 }
 
 int SearchServer::GetDocumentId(int index) const {
@@ -137,7 +137,7 @@ SearchServer::Query SearchServer::ParseQuery(const std::string& text) const {
 
 // Existence required
 double SearchServer::ComputeWordInverseDocumentFreq(const std::string& word) const {
-    return std::log(GetDocumentCount() * 1.0 / word_to_document_freqs_.at(word).size());
+    return std::log(GetDocumentCount() * 1.0 / static_cast<int>(word_to_document_freqs_.at(word).size()));
 }
 
 

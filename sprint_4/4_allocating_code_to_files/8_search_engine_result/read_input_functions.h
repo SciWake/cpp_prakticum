@@ -2,5 +2,5 @@
 
 #include <string>
 
-std::string ReadLine();
-int ReadLineWithNumber();
+std::string ReadLine(); // Unused
+int ReadLineWithNumber(); // Unused

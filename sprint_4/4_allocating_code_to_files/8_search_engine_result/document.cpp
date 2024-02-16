@@ -6,10 +6,10 @@
 using namespace std::string_literals;
 
 
-Document::Document(int id, double relevance, int rating)
-    : id(id)
-    , relevance(relevance)
-    , rating(rating) {
+Document::Document(int docId, double docRelevance, int docRating)
+    : id(docId)
+    , relevance(docRelevance)
+    , rating(docRating) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Document& document) {
