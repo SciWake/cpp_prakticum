@@ -39,7 +39,7 @@ void AppendRandom(vector<int>& v, int n) {
 }
 
 void Operate() {
-    LogDuration guard("Total"s);
+    LOG_DURATION("Total"s);
     
     vector<int> random_bits;
 
@@ -49,20 +49,20 @@ void Operate() {
 
     // заполним вектор случайными числами 0 и 1
     {
-        LogDuration guard("Append random"s);
+        LOG_DURATION("Append random"s);
         AppendRandom(random_bits, N);
     }
 
     // перевернём вектор задом наперёд
     vector<int> reversed_bits;
     {
-        LogDuration guard("Reverse"s);
+        LOG_DURATION("Reverse"s);
         reversed_bits = ReverseVector(random_bits);
     }
 
     // посчитаем процент единиц на начальных отрезках вектора
     {
-        LogDuration guard("Counting"s);
+        LOG_DURATION("Counting"s);
         for (int i = 1, step = 1; i <= N; i += step, step *= 2) {
             double rate = CountPops(reversed_bits, 0, i) * 100. / i;
             cout << "After "s << i << " bits we found "s << rate << "% pops"s << endl;
