@@ -37,10 +37,14 @@ vector<int> ReverseVector3(const vector<int>& source_vector) {
 vector<int> ReverseVector4(const vector<int>& source_vector) {
     vector<int> res(source_vector.size());
 
-    // реализация вашего собственного реверсирования
+    int i = static_cast<int>(res.size()) - 1;
+    for (auto it = source_vector.begin(); it != source_vector.end(); ++it) {
+        res[i--] = *it;
+    }
 
     return res;
 }
+
 
 void Operate() {
     vector<int> rand_vector;
@@ -53,7 +57,29 @@ void Operate() {
         rand_vector.push_back(rand());
     }
 
+    {
+        vector<int> reversed_bits;
+        LOG_DURATION("Good"s);
+        reversed_bits = ReverseVector2(rand_vector);
+    }
+
     // код измерения тут
+    if (n <= 100000) {
+        vector<int> reversed_bits;
+        LOG_DURATION("Naive"s);
+        reversed_bits = ReverseVector(rand_vector);
+    } else {
+        {
+            vector<int> reversed_bits;
+            LOG_DURATION("Best"s);
+            reversed_bits = ReverseVector3(rand_vector);
+        }
+        {
+            vector<int> reversed_bits;
+            LOG_DURATION("Your"s);
+            reversed_bits = ReverseVector4(rand_vector);
+        }
+    }
 }
 
 int main() {
