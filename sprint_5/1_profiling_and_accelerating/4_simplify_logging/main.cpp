@@ -1,7 +1,10 @@
+#include "log_duration.h"
+
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <thread>
 
 using namespace std;
 
@@ -66,5 +69,16 @@ void Operate() {
 }
 
 int main() {
-    Operate();
+    // название переменной не играет роли
+    LogDuration guard("Total sleeping"s);
+
+    {
+        LogDuration guard("Sleeping 1 sec"s);
+        this_thread::sleep_for(chrono::seconds(1));
+    }
+
+    {
+        LogDuration guard("Sleeping 2 sec"s);
+        this_thread::sleep_for(chrono::seconds(2));
+    }
 }
