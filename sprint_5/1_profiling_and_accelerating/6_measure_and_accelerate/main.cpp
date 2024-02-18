@@ -7,10 +7,14 @@
 
 using namespace std;
 
+
 vector<int> ReverseVector(const vector<int>& source_vector) {
     vector<int> res;
-    for (int i : source_vector) {
-        res.insert(res.begin(), i);
+
+    // будем проходить source_vector задом наперёд
+    // с помощью обратного итератора
+    for (auto iterator = source_vector.rbegin(); iterator != source_vector.rend(); ++iterator) {
+        res.push_back(*iterator);
     }
 
     return res;
