@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-#include <thread>
 
 using namespace std;
 
@@ -40,6 +39,8 @@ void AppendRandom(vector<int>& v, int n) {
 }
 
 void Operate() {
+    LogDuration guard("Total"s);
+    
     vector<int> random_bits;
 
     // операция << для целых чисел это сдвиг всех бит в двоичной
@@ -47,38 +48,28 @@ void Operate() {
     static const int N = 1 << 17;
 
     // заполним вектор случайными числами 0 и 1
-    const auto append_start = chrono::steady_clock::now();
-    AppendRandom(random_bits, N);
-    const auto append_end = chrono::steady_clock::now();
-    cerr << "Append random: "s << chrono::duration_cast<chrono::milliseconds>(append_end - append_start).count() << " ms"s << endl;
+    {
+        LogDuration guard("Append random"s);
+        AppendRandom(random_bits, N);
+    }
 
     // перевернём вектор задом наперёд
-    const auto rev_start = chrono::steady_clock::now();
-    vector<int> reversed_bits = ReverseVector(random_bits);
-    const auto rev_end = chrono::steady_clock::now();
-    cerr << "Reverse: "s << chrono::duration_cast<chrono::milliseconds>(rev_end - rev_start).count() << " ms"s << endl;
+    vector<int> reversed_bits;
+    {
+        LogDuration guard("Reverse"s);
+        reversed_bits = ReverseVector(random_bits);
+    }
 
     // посчитаем процент единиц на начальных отрезках вектора
-    const auto count_start = chrono::steady_clock::now();
-    for (int i = 1, step = 1; i <= N; i += step, step *= 2) {
-        double rate = CountPops(reversed_bits, 0, i) * 100. / i;
-        cout << "After "s << i << " bits we found "s << rate << "% pops"s << endl;
+    {
+        LogDuration guard("Counting"s);
+        for (int i = 1, step = 1; i <= N; i += step, step *= 2) {
+            double rate = CountPops(reversed_bits, 0, i) * 100. / i;
+            cout << "After "s << i << " bits we found "s << rate << "% pops"s << endl;
+        }
     }
-    const auto count_end = chrono::steady_clock::now();
-    cerr << "Counting: "s << chrono::duration_cast<chrono::milliseconds>(count_end - count_start).count() << " ms"s << endl;
 }
 
 int main() {
-    // название переменной не играет роли
-    LogDuration guard("Total sleeping"s);
-
-    {
-        LogDuration guard("Sleeping 1 sec"s);
-        this_thread::sleep_for(chrono::seconds(1));
-    }
-
-    {
-        LogDuration guard("Sleeping 2 sec"s);
-        this_thread::sleep_for(chrono::seconds(2));
-    }
+    Operate();
 }
