@@ -67,8 +67,8 @@ void Operate() {
         // посчитаем процент единиц на начальных отрезках вектора
         int prev_sum = 0;
         int prev_i = 0;
-        for (int i = 1, step = 1; i <= n; i += step, step *= 2) {
-            const int sum = prev_sum + CountPops(reversed_digits, prev_i, i);
+        for (int i = 1, step = 1; i <= N; i += step, step *= 2) {
+            const int sum = prev_sum + CountPops(reversed_bits, prev_i, i);
 
             cout << "After "s << i << " digits we found "s << (sum * 100. / i) << "% pops"s << endl;
 
