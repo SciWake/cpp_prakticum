@@ -1,5 +1,6 @@
 #include "log_duration.h"
 
+#include <cassert>
 #include <iostream>
 #include <numeric>
 #include <random>
@@ -24,7 +25,24 @@ vector<float> GetRandomVector(int size) {
     return res;
 }
 
+void Test() {
+    // 4 дня по 3 измерения
+    vector<vector<float>> v = {
+        {0, -1, -1},
+        {1, -2, -2},
+        {2, 3, -3},
+        {3, 4, -4}
+    };
+
+    // среднее для 0-го измерения (1+2+3) / 3 = 2 (не учитывам 0)
+    // среднее для 1-го измерения (3+4) / 2 = 3.5 (не учитывам -1, -2)
+    // среднее для 2-го не определено (все температуры отрицательны), поэтому должен быть 0
+
+    assert(ComputeAvgTemp(v) == vector<float>({2, 3.5f, 0}));
+}
+
 int main() {
+    // Test()
     vector<vector<float>> data;
     data.reserve(5000);
 
