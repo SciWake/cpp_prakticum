@@ -65,9 +65,15 @@ void Operate() {
     {
         LOG_DURATION("Counting"s);
         // посчитаем процент единиц на начальных отрезках вектора
-        for (int i = 1, step = 1; i <= N; i += step, step *= 2) {
-            double rate = CountPops(reversed_bits, 0, i) * 100. / i;
-            cout << "After "s << i << " digits we found "s << rate << "% pops"s << endl;
+        int prev_sum = 0;
+        int prev_i = 0;
+        for (int i = 1, step = 1; i <= n; i += step, step *= 2) {
+            const int sum = prev_sum + CountPops(reversed_digits, prev_i, i);
+
+            cout << "After "s << i << " digits we found "s << (sum * 100. / i) << "% pops"s << endl;
+
+            prev_i = i;
+            prev_sum = sum;
         }
     }
 }
