@@ -24,6 +24,7 @@ int CountPops(const vector<int>& source_vector, int begin, int end) {
 }
 
 void AppendRandom(vector<int>& v, int n) {
+    v.reserve(n);
     for (int i = 0; i < n; i += 15) {
         int number = rand();
 
@@ -44,7 +45,7 @@ void Operate() {
     // операции << для целых чисел это сдвиг всех бит в двоичной
     // записи числа. Запишем с её помощью число 2 в степени 17 (131072)
     static const int N = 1 << 17;
-    vector<int> random_bits(N);
+    vector<int> random_bits;
 
     // заполним вектор случайными числами 0 и 1
     
