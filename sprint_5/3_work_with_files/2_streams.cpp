@@ -6,10 +6,22 @@
 
 using namespace std;
 
-// реализуйте эту функцию:
+
 void CreateFiles(const string& config_file) {
-    
-};
+    ifstream input_file(config_file);
+    ofstream output_file;
+    string line;
+
+    while (getline(input_file, line)) {
+        if (line[0] != '>') {
+            output_file.close();
+            output_file.open(line);
+            continue;
+        }
+
+        output_file << line.substr(1) << endl;
+    }
+}
 
 string GetLine(istream& in) {
     string s;
