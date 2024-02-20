@@ -1,0 +1,7 @@
+shakespeare/hamlet.txt
+>To be, or not to be,
+>that is the question;
+empty.txt
+shakespeare/lear.txt
+>Nor are those empty-hearted whose low sound
+>Reverbs no hollowness.
