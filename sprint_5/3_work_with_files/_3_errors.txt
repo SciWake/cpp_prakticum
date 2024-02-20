@@ -1,0 +1,4 @@
+3 clap
+3 jump
+turn
+3 stomp
