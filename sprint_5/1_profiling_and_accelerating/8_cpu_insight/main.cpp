@@ -9,8 +9,32 @@
 
 using namespace std;
 
+struct PositiveTemperature {
+    float sum = 0.f;
+    int count = 0;
+};
+
 vector<float> ComputeAvgTemp(const vector<vector<float>>& measures) {
-    // место для вашего решения
+    if (measures.empty()) {
+        return {};
+    }
+    size_t n = measures[0].size();
+    vector<PositiveTemperature> stat(n);
+    for (size_t i = 0; i < measures.size(); ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            bool isPosTemp = measures[i][j] > 0;
+            stat[j].count += isPosTemp ? 1 : 0;
+            stat[j].sum += isPosTemp ? measures[i][j] : 0.f;
+        }
+    }
+
+    vector<float> averages;
+    averages.reserve(n);
+    for (const auto& [sum, count] : stat) {
+        averages.push_back(count > 0 ? (sum / count) : 0);
+    }
+
+    return averages;
 }
 
 vector<float> GetRandomVector(int size) {
@@ -37,12 +61,11 @@ void Test() {
     // среднее для 0-го измерения (1+2+3) / 3 = 2 (не учитывам 0)
     // среднее для 1-го измерения (3+4) / 2 = 3.5 (не учитывам -1, -2)
     // среднее для 2-го не определено (все температуры отрицательны), поэтому должен быть 0
-
     assert(ComputeAvgTemp(v) == vector<float>({2, 3.5f, 0}));
 }
 
 int main() {
-    // Test()
+    Test();
     vector<vector<float>> data;
     data.reserve(5000);
 
