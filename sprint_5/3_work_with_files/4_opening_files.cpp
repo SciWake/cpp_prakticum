@@ -11,12 +11,8 @@ size_t GetFileSize(string file) {
     if (!inp) {
         return string::npos;
     }
-
     inp.seekg(0, ios::end);
-
-    size_t res = static_cast<size_t>(inp.tellg());
-
-    return res;
+    return static_cast<size_t>(inp.tellg());
 }
 
 int main() {
