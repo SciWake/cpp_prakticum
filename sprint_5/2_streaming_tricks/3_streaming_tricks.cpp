@@ -16,8 +16,8 @@ public:
         stream_.tie(tied_before_);
     }
 private:
-    ostream* tied_before_;
     istream& stream_;
+    ostream* tied_before_;
 };
 
 
