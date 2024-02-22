@@ -8,20 +8,15 @@ using namespace std;
 // функция возвращает true, если векторы из одинаковых элементов
 // перепишите эту функцию, улучшив её асимптотическую сложность
 bool TestPermut(const vector<int>& v1, const vector<int>& v2) {
-    // если они разной длины, элементы заведомо разные
-    if (v1.size() != v2.size()) {
-        return false;
-    }
+    if (v1.size() != v2.size()) return false;
 
-    for (int i : v1) {
-        // проверяем, что каждый элемент первого вектора
-        // содержится одинаковое количество раз в обоих векторах
-        if (count(v1.begin(), v1.end(), i) != count(v2.begin(), v2.end(), i)) {
-            return false;
-        }
-    }
+    vector<int> sort_v1 = v1;
+    vector<int> sort_v2 = v2;
 
-    return true;
+    sort(sort_v1.begin(), sort_v1.end());
+    sort(sort_v2.begin(), sort_v2.end());
+
+    return sort_v1 == sort_v2;
 }
 
 int main() {
