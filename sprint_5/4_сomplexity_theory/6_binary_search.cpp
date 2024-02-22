@@ -4,16 +4,18 @@ using namespace std;
 
 template <typename F>
 int FindFloor(int n, F drop) {
-    // Переделайте этот алгоритм, имеющий линейную сложность.
-    // В итоге должен получится логарифмический алгоритм.
-    for (int i = 1; i < n; ++i) {
-        if (drop(i)) {
-            return i;
+    int lo = 1, hi = n;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (drop(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
         }
     }
-
-    return n;
+    return lo;
 }
+
 
 int main() {
     int n,t;
