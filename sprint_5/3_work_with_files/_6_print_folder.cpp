@@ -18,6 +18,15 @@ void CreateFile(path p) {
     }
 }
 
+void PrintFileOrFolder(filesystem::file_status status) {
+    if (status.type() == filesystem::file_type::regular) {
+        cout << "Путь указывает на файл"s << endl;
+    } else if (status.type() == filesystem::file_type::directory) {
+        cout << "Путь указывает на папку"s << endl;
+    } else {
+        cout << "Путь указывает другой объект"s << endl;
+    }
+}
 void PrintFileOrFolder(filesystem::path p) {
     error_code err;
     auto status = filesystem::status(p, err);
@@ -26,13 +35,7 @@ void PrintFileOrFolder(filesystem::path p) {
         return;
     }
 
-    if (status.type() == filesystem::file_type::regular) {
-        cout << "Путь "s << p.string() << " указывает на файл"s << endl;
-    } else if (status.type() == filesystem::file_type::directory) {
-        cout << "Путь "s << p.string() << " указывает на папку"s << endl;
-    } else {
-        cout << "Путь "s << p.string() << " указывает на другой объект"s << endl;
-    }
+    PrintFileOrFolder(status);
 }
 
 int main() {
@@ -42,6 +45,6 @@ int main() {
     std::ofstream(p / "file.txt"_p) << "File content"s;
 
     for (const auto& dir_entry: filesystem::directory_iterator(p)) {
-        PrintFileOrFolder(dir_entry.path());
+        PrintFileOrFolder(dir_entry.status());
     }
 } 
