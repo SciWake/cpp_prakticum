@@ -28,12 +28,12 @@ string BruteForceHelper(F check, string password, int position) {
 
 template <typename F>
 string BruteForce(F check) {
-    string password = "AAAAA"s;
+    string password = "AA"s;
     return BruteForceHelper(check, password, 0);
 }
 
 int main() {
-    string secretPassword = "ABCDE"s;
+    string secretPassword = "AC"s;
     auto check = [secretPassword](const string& s) {
         return s == secretPassword;
     };
@@ -42,3 +42,9 @@ int main() {
 
     return 0;
 }
+
+// stack:
+// string secretPassword = "AC"s;
+// BruteForceHelper(check, "AA", 0)
+//      BruteForceHelper(check, "AA", 1)
+//          BruteForceHelper(check, "AA", 2) -> ""
