@@ -10,12 +10,62 @@
 using namespace std;
 using filesystem::path;
 
+
 path operator""_p(const char* data, std::size_t sz) {
     return path(data, data + sz);
 }
 
-// напишите эту функцию
-bool Preprocess(const path& in_file, const path& out_file, const vector<path>& include_directories);
+bool Preprocess(const path& in_file, const path& out_file, const vector<path>& include_directories) {
+    static regex include_file(R"/(\s*#\s*include\s*"([^ "]*)"\s*)/");
+    static regex include_lib(R"/(\s*#\s*include\s*<([^>]*)>\s*)/");
+    smatch m;
+    string line;
+    size_t line_number = 0;
+    ifstream in(in_file);
+    ofstream out(out_file, ios::out | ios::app);
+
+    auto process_include = [&](const path& included_path) {
+        ifstream reader_file(included_path);
+        if (reader_file.is_open()) {
+            Preprocess(included_path, out_file, include_directories);
+            reader_file.close();
+        } else {
+            cout << "unknown include file "s << included_path.filename().string()
+                 << " at file "s << in_file.string() << " at line "s << line_number << endl;
+        }
+    };
+
+    while (getline(in, line)) {
+        ++line_number;
+        if (regex_match(line, m, include_file) || regex_match(line, m, include_lib)) {
+            path path_file = string(m[1]);
+            path full_path = in_file.parent_path() / path_file;
+            
+            if (exists(full_path)) {
+                process_include(full_path);
+            } else {
+                bool found = false;
+                for (const auto& directory : include_directories) {
+                    path include_path = directory / path_file;
+                    if (exists(include_path)) {
+                        found = true;
+                        process_include(include_path);
+                        break;
+                    }
+                }
+                if (!found) {
+                    cout << "unknown include file "s << path_file.filename().string()
+                         << " at file "s << in_file.string() << " at line "s << line_number << endl;
+                    return false;
+                }
+            }
+        } else {
+            out << line << endl;
+        }
+    }
+
+    return true;
+}
 
 string GetFileContents(string file) {
     ifstream stream(file);
