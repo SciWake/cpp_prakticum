@@ -1,9 +1,10 @@
 #include <cassert>
 #include <string>
 
-template </* Напишите недостающий код самостоятельно */>
-bool IsSameObject(/*Напишите недостающий код самостоятельно*/) {
+template <typename T>
+bool IsSameObject(T& value1, T& value2) {
     /*Напишите тело функции самостоятельно */
+    return &value1 == &value2;
 }
 
 int main() {
