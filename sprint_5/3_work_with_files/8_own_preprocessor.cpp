@@ -66,7 +66,6 @@ bool Preprocess(const path& in_file, const path& out_file, const vector<path>& i
     return true;
 }
 
-
 string GetFileContents(string file) {
     ifstream stream(file);
 
