@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <deque>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -13,22 +14,28 @@ class TicketOffice {
 public:
     // добавить билет в систему
     void PushTicket(const string& name) {
-        // реализуйте метод
+        tickets_.push_back({last_id_, name});
+        last_id_++;
     }
 
     // получить количество доступных билетов
     int GetAvailable() const {
-        // реализуйте метод
+        return tickets_.size();
     }
 
     // получить количество доступных билетов определённого типа
     int GetAvailable(const string& name) const {
-        // реализуйте метод
+        return count_if(tickets_.begin(), tickets_.end(), 
+                        [name](Ticket ticket) {return ticket.name == name;}
+        );
     }
 
     // отозвать старые билеты (до определённого id)
     void Invalidate(int minimum) {
-        // реализуйте метод
+        while (!tickets_.empty() && tickets_.front().id < minimum)
+        {
+            tickets_.pop_front();
+        }
     }
 
 private:
