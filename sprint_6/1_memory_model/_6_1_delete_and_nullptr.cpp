@@ -10,6 +10,7 @@ int main() {
     // *value_ptr принимает случайное значение (для примера)
     srand(time(0));
     *value_ptr = rand();
+    cout << "value_ptr = "s<< *value_ptr << endl;
 
     if (bool delete_now = (*value_ptr % 2) == 0;  // Этот код будет выполнен только для чётных значений *value_ptr
         delete_now) {
