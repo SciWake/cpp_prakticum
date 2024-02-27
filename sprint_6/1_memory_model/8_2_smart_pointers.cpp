@@ -47,7 +47,11 @@ public:
     // Оператор разыменования возвращает ссылку на объект
     // Выбрасывает исключение std::logic_error, если указатель нулевой
     T& operator*() const {
-        return ptr_ ? &ptr_ : std::logic_error;
+        using namespace std::literals;
+        if (!ptr_) {
+            throw std::logic_error("Scoped ptr is null"s);
+        }
+        return *ptr_;
     }
 
     T* operator->() const {
