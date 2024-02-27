@@ -77,3 +77,9 @@ private:
 };
 
 // Напишите функцию main, в ней создайте осьминога и несколько его копий
+int main() {
+    Octopus octopus1;
+    Octopus octopus2 = octopus1;
+    Octopus octopus3 = octopus1;
+    Octopus octopus4 = octopus1;
+}
