@@ -38,6 +38,12 @@ public:
         return other_ptr;
     }
 
+    // Оператор разыменования возвращает ссылку на объект
+    // Выбрасывает исключение std::logic_error, если указатель нулевой
+    T& operator*() const {
+        return ptr_ ? &ptr_ : std::logic_error;
+    }
+
 private:
     T* ptr_ = nullptr;
 };
