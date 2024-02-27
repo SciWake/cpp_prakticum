@@ -50,6 +50,14 @@ public:
         return ptr_ ? &ptr_ : std::logic_error;
     }
 
+    T* operator->() const {
+        using namespace std::literals;
+        if (!ptr_) {
+            throw std::logic_error("Scoped ptr is null"s);
+        }
+        return ptr_;
+    }
+
 private:
     T* ptr_ = nullptr;
 };
