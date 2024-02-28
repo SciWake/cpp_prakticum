@@ -1,3 +1,8 @@
+/*
+Следующая программа выводит размеры и величину выравнивания для 
+некоторых стандартных и пользовательских типов на целевой платформе:
+*/
+
 #include <cstddef>  // cstddef необходим для использования std::byte
 #include <cstdint>  // cstdint необходим для использования uint32_t и int64_t
 #include <iostream>
@@ -17,3 +22,10 @@ int main() {
 
     return 0;
 }
+
+/* Output:
+char: size=1, alignment=1
+int: size=4, alignment=4
+double: size=8, alignment=8
+Sportsman: size=16, alignment=8
+*/
