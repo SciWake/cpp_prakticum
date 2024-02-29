@@ -40,8 +40,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/alex/github/cpp_prakticum/sprint_4/4_allocating_code_to_files/3_1_directive_include",
-      "program": "/home/alex/github/cpp_prakticum/sprint_4/4_allocating_code_to_files/3_1_directive_include/build/Debug/outDebug",
+      "cwd": "/home/alex/github/cpp_prakticum/sprint_6/1_memory_model",
+      "program": "/home/alex/github/cpp_prakticum/sprint_6/1_memory_model/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
