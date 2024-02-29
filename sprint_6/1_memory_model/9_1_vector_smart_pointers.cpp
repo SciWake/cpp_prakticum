@@ -27,10 +27,7 @@ public:
     // Деструктор удаляет объекты в куче, на которые ссылаются указатели,
     // в векторе items_
     ~PtrVector() {
-        for (auto item : items_) {
-            delete item;
-        }
-        items_.clear(); 
+        DeleteItems();
     }
 
     // Возвращает ссылку на вектор указателей
