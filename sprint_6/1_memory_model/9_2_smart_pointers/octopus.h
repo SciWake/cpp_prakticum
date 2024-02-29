@@ -50,10 +50,6 @@ public:
     // равным (количество_щупалец + 1):
     // 1, 2, 3, ...
     // Возвращает ссылку на добавленное щупальце
-    // Tentacle& AddTentacle() {
-    //     Реализуйте добавление щупальца самостоятельно
-    // }
-
     Tentacle& AddTentacle() {
         auto p = ScopedPtr(new Tentacle(tentacles_.GetItems().size() + 1));
         tentacles_.GetItems().push_back(p.GetRawPtr());
