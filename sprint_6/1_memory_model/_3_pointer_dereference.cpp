@@ -2,15 +2,12 @@
 
 using namespace std;
 
-#include <iostream>
-
 int main() {
     int value = 1;
 
     // Указатель value_ptr1, ссылающийся на переменную value
     int* value_ptr1 = &value;
-    cout << value_ptr1 << "  "s << &value << endl;
-    cout << &value_ptr1;
+
     // Указатель value_ptr2, копия указателя value_ptr1, также ссылается на переменную value
     int* value_ptr2 = value_ptr1;
 
