@@ -3,6 +3,9 @@
 #include <string>
 #include <utility>
 
+#include <iostream>
+using namespace std;
+
 template <typename Type>
 class SingleLinkedList {
     // Узел списка
@@ -21,11 +24,25 @@ public:
         : size_(0)
     {
     }
+    
+    ~SingleLinkedList() {
+        Clear();
+    }
 
     // Вставляет элемент value в начало списка за время O(1)
     void PushFront(const Type& value) {
         head_.next_node = new Node(value, head_.next_node);
         ++size_;
+    }
+
+    // Очищает список за время O(N)
+    void Clear() noexcept {
+        while (head_.next_node) {
+            Node* next_node = head_.next_node->next_node;
+            delete head_.next_node;
+            head_.next_node = next_node;
+            --size_;
+        }
     }
 
     // Возвращает количество элементов в списке
