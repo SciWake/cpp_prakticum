@@ -17,18 +17,20 @@ class SingleLinkedList {
     };
 
 public:
+    SingleLinkedList()
+        : size_(0)
+    {
+    }
+
     // Возвращает количество элементов в списке
     [[nodiscard]] size_t GetSize() const noexcept {
         // Заглушка. Реализуйте метод самостоятельно
-        assert(false);
-        return 42;
+        return size_;
     }
 
     // Сообщает, пустой ли список
     [[nodiscard]] bool IsEmpty() const noexcept {
-        // Заглушка. Реализуйте метод самостоятельно
-        assert(false);
-        return false;
+        return size_ == 0;
     }
 
 private:
