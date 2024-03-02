@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
@@ -71,17 +72,14 @@ template <typename Comparator>
 vector<const Cat*> GetSortedCats(const vector<Cat>& cats, const Comparator& comp) {
     vector<const Cat*> sorted_cat_pointers;
 
-    /*
-    Напишите тело функции самостоятельно. Подсказка:
-    1) Поместите в массив sorted_cat_pointers адреса объектов из массива cats.
-    2) Отсортируйте массив sorted_cat_pointers с помощью переданного компаратора comp.
-       Так как comp сравнивает ссылки на объекты, а отсортировать нужно указатели,
-       передайте в sort лямбда функцию, принимающую указатели и сравнивающую объекты
-       при помощи компаратора comp:
-       [comp](const Cat* lhs, const Cat* rhs) {
-           return comp(*lhs, *rhs);
-       }
-    */
+    for (const Cat& cat : cats) {
+        sorted_cat_pointers.push_back(&cat);
+    }
+
+    sort(sorted_cat_pointers.begin(), sorted_cat_pointers.end(), [comp](const Cat* lhs, const Cat* rhs) {
+        return comp(*lhs, *rhs);
+        });
+
     return sorted_cat_pointers;
 }
 
@@ -89,7 +87,11 @@ vector<const Cat*> GetSortedCats(const vector<Cat>& cats, const Comparator& comp
 // Пример вывода элементов vector<const Cat*>:
 // {{Tom, male, breed: Bengal, age:2}, {Charlie, male, breed: Balinese, age:7}}
 void PrintCatPointerValues(const vector<const Cat*>& cat_pointers, ostream& out) {
-    // Напишите функцию самостоятельно
+    out << "{"s;
+    for (size_t i = 0; i < cat_pointers.size(); ++i) {
+        out << *cat_pointers.at(i) << (i != cat_pointers.size() - 1 ? ", "s : ""s);
+    }
+    out << "}"s;
 }
 
 int main() {
