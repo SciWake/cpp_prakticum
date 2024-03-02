@@ -22,6 +22,12 @@ public:
     {
     }
 
+    // Вставляет элемент value в начало списка за время O(1)
+    void PushFront(const Type& value) {
+        head_.next_node = new Node(value, head_.next_node);
+        ++size_;
+    }
+
     // Возвращает количество элементов в списке
     [[nodiscard]] size_t GetSize() const noexcept {
         return size_;
