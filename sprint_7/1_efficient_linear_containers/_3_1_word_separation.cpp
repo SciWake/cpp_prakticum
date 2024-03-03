@@ -5,6 +5,7 @@
 #include <string_view> // Для использования string_view
 #include <vector>
 
+using namespace std;
 
 vector<string> SplitIntoWords(const string& text) {
     vector<string> words;
