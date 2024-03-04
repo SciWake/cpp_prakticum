@@ -51,3 +51,17 @@ int main() {
         cout << iter->first << " - "s << iter->second << endl;
     }
 }
+/*
+Filling: 59 ms
+Moving & sorting: 3 ms
+Слово - Количество упоминаний в тексте
+and - 8877
+that - 5832
+the - 5623
+of - 5351
+to - 4002
+he - 3718
+in - 3544
+his - 3103
+for - 3027
+a - 3025 */
