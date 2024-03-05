@@ -33,6 +33,11 @@ public:
         return digits_;
     }
 
+    bool operator==(const VehiclePlate& plate) {
+        return letters_ == plate.letters_ && digits_ == plate.digits_ 
+               && region_ == plate.region_;
+    }
+
 private:
     array<char, 3> letters_;
     int digits_;
