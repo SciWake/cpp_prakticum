@@ -16,8 +16,9 @@ public:
     }
 
     void PushCoin(int64_t value) {
-        auto it = lower_bound(nominals_.begin(), nominals_.end(), value);
-        ++counts_[distance(nominals_.begin(), it)];
+        const int pos = GetIndex(value);
+        assert(pos < int(nominals_.size()));
+        ++counts_[pos];
     }
 
     void PrintCoins(ostream& out) const {
@@ -29,6 +30,13 @@ public:
     }
 
 private:
+    // int GetIndex(int64_t value) const {
+    //     return find(nominals_.begin(), nominals_.end(), value) - nominals_.begin();
+    // }
+    int GetIndex(int64_t value) const {
+        return distance(begin(nominals_), lower_bound(begin(nominals_), end(nominals_), value));
+    }
+    
     const vector<int64_t> nominals_;
     vector<int> counts_;
 };
