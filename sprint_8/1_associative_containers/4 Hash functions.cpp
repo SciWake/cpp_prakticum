@@ -1,4 +1,5 @@
 #include <array>
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -60,16 +61,17 @@ public:
         if (index >= int(elements_.size())) {
             elements_.resize(index * 2 + 1);
         }
-
-        elements_[index] = move(elem);
+        auto it = find(begin(elements_[index]), end(elements_[index]), elem);
+        if (it == elements_[index].end()) {
+            elements_[index].push_back(move(elem));
+        }
     }
 
     void PrintAll(ostream& out) const {
-        for (auto& e : elements_) {
-            if (!e.has_value()) {
-                continue;
+        for (auto& element : elements_) {
+            for (auto& object : element) {
+                out << object << endl;
             }
-            out << e.value() << endl;
         }
     }
 
