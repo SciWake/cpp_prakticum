@@ -1,6 +1,8 @@
 #include <array>
 #include <algorithm>
 #include <iomanip>
+#include <tuple>
+#include <optional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -9,6 +11,10 @@
 using namespace std;
 
 class VehiclePlate {
+private:
+    auto AsTuple() const {
+        return tie(letters_, digits_, region_);
+    }
 public:
     VehiclePlate(char l0, char l1, int digits, char l2, int region)
         : letters_{l0, l1, l2}
@@ -34,9 +40,13 @@ public:
         return digits_;
     }
 
-    bool operator==(const VehiclePlate& plate) {
-        return letters_ == plate.letters_ && digits_ == plate.digits_ 
-               && region_ == plate.region_;
+    // bool operator==(const VehiclePlate& plate) {
+    //     return letters_ == plate.letters_ && digits_ == plate.digits_ 
+    //            && region_ == plate.region_;
+    // }
+
+    bool operator==(const VehiclePlate& other) const {
+        return AsTuple() == other.AsTuple();
     }
 
 private:
@@ -61,16 +71,17 @@ public:
         if (index >= int(elements_.size())) {
             elements_.resize(index * 2 + 1);
         }
-        auto it = find(begin(elements_[index]), end(elements_[index]), elem);
-        if (it == elements_[index].end()) {
-            elements_[index].push_back(move(elem));
+
+        auto& batch = elements_[index];
+        if (find(begin(batch), end(batch), elem) == end(batch)) {
+            batch.push_back(move(elem));
         }
     }
 
     void PrintAll(ostream& out) const {
-        for (auto& element : elements_) {
-            for (auto& object : element) {
-                out << object << endl;
+        for (auto& bag : elements_) {
+            for (auto& e : bag) {
+                out << e << endl;
             }
         }
     }
