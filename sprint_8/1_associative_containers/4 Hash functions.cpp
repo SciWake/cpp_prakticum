@@ -1,7 +1,6 @@
 #include <array>
 #include <iomanip>
 #include <iostream>
-#include <optional>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -74,7 +73,7 @@ public:
     }
 
 private:
-    vector<optional<T>> elements_;
+    vector<vector<T>> elements_;
 };
 
 int main() {
