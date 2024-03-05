@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -15,11 +16,16 @@ public:
     }
 
     void PushCoin(int64_t value) {
-        // реализуйте метод добавления купюры или монеты
+        auto it = lower_bound(nominals_.begin(), nominals_.end(), value);
+        ++counts_[distance(nominals_.begin(), it)];
     }
 
     void PrintCoins(ostream& out) const {
-        // реализуйте метод печати доступных средств
+        for (size_t i = 0; i < nominals_.size(); ++i) {
+            if (counts_[i]) {
+                out << nominals_[i] << ": " << counts_[i] << endl;
+            }
+        }
     }
 
 private:
@@ -32,7 +38,20 @@ ostream& operator<<(ostream& out, const MoneyBox& cash) {
     return out;
 }
 
+
+int TestOne() {
+    MoneyBox cash({1, 500, 10000});
+    cash.PushCoin(500);
+    cash.PushCoin(500);
+    cash.PushCoin(10000);
+    assert((cash.GetCounts() == vector<int>{0,2,1}));
+    cout << cash << endl;
+}
+
+
 int main() {
+    TestOne();
+
     MoneyBox cash({10, 50, 100, 200, 500, 1000, 2000, 5000});
 
     int times;
