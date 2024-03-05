@@ -66,6 +66,7 @@ his - 3103
 for - 3027
 a - 3025 */
 
+#include <unordered_map>
 
 vector<pair<string, int>> GetSortedWordCounts(vector<string> words) {
     unordered_map<string, int> counts_map;
