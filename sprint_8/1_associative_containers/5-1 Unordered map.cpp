@@ -79,9 +79,13 @@ public:
     }
 
     // метод возвращает количество зарегистрированных парковок автомобиля
-    int GetCount(const VehiclePlate& car) const {
-        auto it = car_to_parks_.find(car);
-        return it == car_to_parks_.end() ? 0 : it->second;
+    // int GetCount(const VehiclePlate& car) const {
+    //     auto it = car_to_parks_.find(car);
+    //     return it == car_to_parks_.end() ? 0 : it->second;
+    // }
+
+    int GetCount(const VehiclePlate& car) const {      
+        return car_to_parks_.count(car) == 0 ? 0 : car_to_parks_.at(car);
     }
 
     auto& GetAllData() const {
