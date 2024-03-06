@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -52,10 +53,6 @@ public:
         return AsTuple() == other.AsTuple();
     }
 
-    size_t operator()(const VehiclePlate& plate) const {
-        return static_cast<size_t>(plate.Hash());
-    }
-
 private:
     std::tuple<array<char, 3>, int, int> AsTuple() const {
         return std::tie(letters_, digits_, region_);
@@ -70,8 +67,15 @@ ostream& operator<<(ostream& out, VehiclePlate plate) {
     return out;
 }
 
+class VehiclePlateHasher {
+public:
+    size_t operator()(const VehiclePlate& plate) const {
+        return static_cast<size_t>(plate.Hash());
+    }
+};
+
 int main() {
-    unordered_set<VehiclePlate> plate_base;
+    unordered_set<VehiclePlate, VehiclePlateHasher> plate_base;
 
     plate_base.insert({'B', 'H', 840, 'E', 99});
     plate_base.insert({'O', 'K', 942, 'K', 78});
