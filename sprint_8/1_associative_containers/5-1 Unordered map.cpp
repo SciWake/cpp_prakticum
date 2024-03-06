@@ -63,21 +63,25 @@ public:
         // измените эту функцию, чтобы она учитывала все данные номера
         // рекомендуется использовать метод ToString() и существующий 
         // класс hash<string>
-        return static_cast<size_t>(plate.Hash());
+        // return static_cast<size_t>(plate.Hash());
+        return static_cast<size_t>(hasher_(plate.ToString()));
     }
+      
+private:
+    hash<string> hasher_;
 };
 
 class ParkingCounter {
 public:
     // зарегистрировать парковку автомобиля
     void Park(VehiclePlate car) {
-        // место для вашей реализации
+        ++car_to_parks_[car];
     }
 
-    // метод возвращает количество зарегистрированных 
-    // парковок автомобиля
+    // метод возвращает количество зарегистрированных парковок автомобиля
     int GetCount(const VehiclePlate& car) const {
-        // место для вашей реализации
+        auto it = car_to_parks_.find(car);
+        return it == car_to_parks_.end() ? 0 : it->second;
     }
 
     auto& GetAllData() const {
@@ -87,6 +91,7 @@ public:
 private:
     // для хранения данных используйте контейнер unordered_map
     // назовите поле класса car_to_parks_
+    unordered_map<VehiclePlate, int, VehiclePlateHasher> car_to_parks_;
 };
 
 int main() {
