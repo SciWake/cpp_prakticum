@@ -11,10 +11,13 @@
 using namespace std;
 
 class VehiclePlate {
-private:
-    auto AsTuple() const {
-        return tie(letters_, digits_, region_);
-    }
+// private:
+//     auto AsTuple() const {
+//         return tie(letters_, digits_, region_);
+//     }
+// https://habr.com/ru/articles/478124/
+// https://learn.microsoft.com/ru-ru/cpp/cpp/auto-cpp?view=msvc-170
+// error: use of 'sum' before deduction of 'auto'
 public:
     VehiclePlate(char l0, char l1, int digits, char l2, int region)
         : letters_{l0, l1, l2}
@@ -50,6 +53,9 @@ public:
     }
 
 private:
+    std::tuple<array<char, 3>, int, int> AsTuple() const {
+        return std::tie(letters_, digits_, region_);
+    }
     array<char, 3> letters_;
     int digits_;
     int region_;
