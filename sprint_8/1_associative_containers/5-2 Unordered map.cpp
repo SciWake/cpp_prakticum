@@ -123,7 +123,27 @@ public:
     // те машины, которые находятся на парковке на данный момент, должны 
     // остаться на парковке, но отсчёт времени для них начинается с нуля
     unordered_map<VehiclePlate, int64_t, VehiclePlateHasher> EndPeriodAndGetBills() {
-        // место для вашей реализации
+        unordered_map<VehiclePlate, Duration, VehiclePlateHasher> durations;
+
+        for (const auto& [car, dur] : complete_parks_) {
+            durations[car] += dur;
+        }
+        complete_parks_.clear();
+
+        auto now = Clock::now();
+        for (auto& [car, when] : now_parked_) {
+            durations[car] += now - when;
+            when = now;
+        }
+
+        unordered_map<VehiclePlate, int64_t, VehiclePlateHasher> results;
+        for (const auto& [car, dur] : durations) {
+            if (dur > Duration()) {
+                results[car] = chrono::duration_cast<chrono::seconds>(dur).count() * cost_per_second_;
+            }
+        }
+
+        return results;
     }
 
     // не меняйте этот метод
