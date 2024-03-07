@@ -105,7 +105,18 @@ public:
 
     // получить счёт за конкретный автомобиль
     int64_t GetCurrentBill(const VehiclePlate& car) const {
-        // место для вашей реализации
+        Duration complete_part = Duration(), current_part = Duration();
+
+        if (now_parked_.count(car) > 0) {
+            current_part = Clock::now() - now_parked_.at(car);
+        }
+
+        if (complete_parks_.count(car) > 0) {
+            complete_part += complete_parks_.at(car);
+        }
+
+        return chrono::duration_cast<chrono::seconds>(
+            complete_part + current_part).count() * cost_per_second_;
     }
 
     // завершить расчётный период
