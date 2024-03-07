@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 class VehiclePlate {
 private:
     auto AsTuple() const {
@@ -33,7 +34,7 @@ public:
         out << letters_[0] << letters_[1];
 
         // чтобы дополнить цифровую часть номера слева нулями
-        // до трёх цифр, используем подобные манипуляторы:
+        // до трёх цифр используем подобные манипуляторы:
         // setfill задаёт символ для заполнения,
         // right задаёт выравнивание по правому краю,
         // setw задаёт минимальное желаемое количество знаков
@@ -54,28 +55,22 @@ ostream& operator<<(ostream& out, VehiclePlate plate) {
     return out;
 }
 
-// возьмите реализацию хешера из прошлого задания
 class VehiclePlateHasher {
 public:
     size_t operator()(const VehiclePlate& plate) const {
-        // измените эту функцию, чтобы она учитывала все данные номера
-        // рекомендуется использовать метод ToString() и существующий 
-        // класс hash<string>
-        // return static_cast<size_t>(plate.Hash());
-        //  return std::hash<std::string>{}(plate.ToString());
-        return static_cast<size_t>(hasher_(plate.ToString()));
+        return hasher(plate.ToString());
     }
+
 private:
-    hash<string> hasher_;
+    hash<string> hasher;
 };
 
-// выбросьте это исключение в случае ошибки парковки
 struct ParkingException {};
 
 template <typename Clock>
 class Parking {
     // при обращении к типу внутри шаблонного параметра мы обязаны использовать 
-    // typename; чтобы этого избежать, объявим псевдонимы для нужных типов
+    // typename чтобы этого измежать объявим псевдонимы для нужных типов
     using Duration = typename Clock::duration;
     using TimePoint = typename Clock::time_point;
 
@@ -89,47 +84,65 @@ public:
         }
         now_parked_[car] = Clock::now();
     }
-    
-    // забрать машину с указанным номером
+
+    // забрать машину с указаным номером
     void Withdraw(const VehiclePlate& car) {
-        try {
-            TimePoint now = Clock::now();
-            Duration dt = now - now_parked_.at(car);
-            complete_parks_[car] += dt;
-            now_parked_.erase(car);
-        } catch (...) {
+        if (now_parked_.count(car) == 0) {
             throw ParkingException();
         }
+
+        auto start_time = now_parked_.at(car);
+        auto end_time = Clock::now();
+        
+        now_parked_.erase(car);
+        complete_parks_[car] += end_time - start_time;
     }
 
     // получить счёт за конкретный автомобиль
     int64_t GetCurrentBill(const VehiclePlate& car) const {
-        // место для вашей реализации
-        auto now = Clock::now();
-        Duration dt{};
-        if (now_parked_.contains(car)) {
-            dt = now - now_parked_.at(car);
+        Duration complete_part = Duration(), current_part = Duration();
+
+        if (now_parked_.count(car) > 0) {
+            current_part = Clock::now() - now_parked_.at(car);
         }
-        if (complete_parks_.contains(car)) {
-            dt += complete_parks_.at(car);
+
+        if (complete_parks_.count(car) > 0) {
+            complete_part += complete_parks_.at(car);
         }
-        return chrono::duration_cast<chrono::seconds>(dt).count() * cost_per_second_;
+
+        return chrono::duration_cast<chrono::seconds>(
+            complete_part + current_part).count() * cost_per_second_;
     }
 
-
-    // завершить расчётный период
-    // те машины, которые находятся на парковке на данный момент, должны 
-    // остаться на парковке, но отсчёт времени для них начинается с нуля
+    // завершить рассчётный период
     unordered_map<VehiclePlate, int64_t, VehiclePlateHasher> EndPeriodAndGetBills() {
-        // место для вашей реализации
+        unordered_map<VehiclePlate, Duration, VehiclePlateHasher> durations;
+
+        for (const auto& [car, dur] : complete_parks_) {
+            durations[car] += dur;
+        }
+        complete_parks_.clear();
+
+        auto now = Clock::now();
+        for (auto& [car, when] : now_parked_) {
+            durations[car] += now - when;
+            when = now;
+        }
+
+        unordered_map<VehiclePlate, int64_t, VehiclePlateHasher> results;
+        for (const auto& [car, dur] : durations) {
+            if (dur > Duration()) {
+                results[car] = chrono::duration_cast<chrono::seconds>(dur).count() * cost_per_second_;
+            }
+        }
+
+        return results;
     }
 
-    // не меняйте этот метод
     auto& GetNowParked() const {
         return now_parked_;
     }
 
-    // не меняйте этот метод
     auto& GetCompleteParks() const {
         return complete_parks_;
     }
@@ -140,8 +153,6 @@ private:
     unordered_map<VehiclePlate, Duration, VehiclePlateHasher> complete_parks_;
 };
 
-// эти часы удобно использовать для тестирования
-// они покажут столько времени, сколько вы задали явно
 class TestClock {
 public:
     using time_point = chrono::system_clock::time_point;
