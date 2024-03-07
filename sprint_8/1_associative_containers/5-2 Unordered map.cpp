@@ -84,7 +84,10 @@ public:
 
     // запарковать машину с указанным номером
     void Park(VehiclePlate car) {
-        // место для вашей реализации
+        if (now_parked_.count(car) > 0) {
+            throw ParkingException();
+        }
+        now_parked_[car] = Clock::now();
     }
 
     // забрать машину с указанным номером
