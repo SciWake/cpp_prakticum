@@ -84,13 +84,12 @@ public:
 
     // запарковать машину с указанным номером
     void Park(VehiclePlate car) {
-        if (now_parked_.contains(car)) {
-            throw ParkingException;
+        if (now_parked_.count(car) > 0) {
+            throw ParkingException();
         }
-        TimePoint now = Clock::now();
-        now_parked_.try_emplace(car, now);
+        now_parked_[car] = Clock::now();
     }
-
+    
     // забрать машину с указанным номером
     void Withdraw(const VehiclePlate& car) {
         try {
