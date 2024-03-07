@@ -56,7 +56,17 @@ ostream& operator<<(ostream& out, VehiclePlate plate) {
 
 // возьмите реализацию хешера из прошлого задания
 class VehiclePlateHasher {
-
+public:
+    size_t operator()(const VehiclePlate& plate) const {
+        // измените эту функцию, чтобы она учитывала все данные номера
+        // рекомендуется использовать метод ToString() и существующий 
+        // класс hash<string>
+        // return static_cast<size_t>(plate.Hash());
+        return static_cast<size_t>(hasher_(plate.ToString()));
+    }
+      
+private:
+    hash<string> hasher_;
 };
 
 // выбросьте это исключение в случае ошибки парковки
