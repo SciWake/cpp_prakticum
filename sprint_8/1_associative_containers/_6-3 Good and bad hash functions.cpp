@@ -158,9 +158,9 @@ int main() {
     cout << "Найдено повторов (2): "s << found << endl;
 }
 
-/* OutPut
-unordered_set: 850 ms
+/* Output
+unordered_set: 35 ms
 Найдено повторов (1): 9
-set: 481 ms
+set: 516 ms
 Найдено повторов (2): 9
 */
