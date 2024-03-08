@@ -1,3 +1,9 @@
+#include "log_duration.h"
+
+#include <algorithm>
+#include <iterator>
+#include <set>
+#include <unordered_set>
 #include <cassert>
 #include <iomanip>
 #include <iostream>
@@ -6,6 +12,8 @@
 
 using namespace std;
 
+/*Номера выглядят как случайные. Протестируем с помощью этого генератора 
+различные хеш-функции. Начнём с простой, учитывающей только цифровую часть:*/
 class VehiclePlate {
 private:
     auto AsTuple() const {
@@ -17,6 +25,10 @@ public:
         return AsTuple() == other.AsTuple();
     }
 
+    bool operator<(const VehiclePlate& other) const {
+        return AsTuple() < other.AsTuple();
+    }
+
     VehiclePlate(char l0, char l1, int digits, char l2, int region)
         : letters_{l0, l1, l2}
         , digits_(digits)
@@ -26,22 +38,34 @@ public:
     string ToString() const {
         ostringstream out;
         out << letters_[0] << letters_[1];
-
-        // чтобы дополнить цифровую часть номера слева нулями
-        // до трёх цифр, используем подобные манипуляторы:
-        // setfill задаёт символ для заполнения,
-        // right задаёт выравнивание по правому краю,
-        // setw задаёт минимальное желаемое количество знаков
         out << setfill('0') << right << setw(3) << digits_;
         out << letters_[2] << setw(2) << region_;
 
         return out.str();
     }
 
+    const array<char, 3>& GetLetters() const {
+        return letters_;
+    }
+
+    int GetDigits() const {
+        return digits_;
+    }
+
+    int GetRegion() const {
+        return region_;
+    }
+
 private:
     array<char, 3> letters_;
     int digits_;
     int region_;
+};
+
+struct PlateHasherTrivial {
+    size_t operator()(const VehiclePlate& plate) const {
+        return static_cast<size_t>(plate.GetDigits());
+    }
 };
 
 ostream& operator<<(ostream& out, VehiclePlate plate) {
@@ -89,10 +113,48 @@ private:
 
 
 int main() {
-    static const int N = 10;
-    PlateGenerator plate_gen;
+    static const int N = 50'000;
 
-    for (int i = 0; i < N; ++i) {
-        cout << plate_gen.Generate() << endl;
+    PlateGenerator generator;
+    vector<VehiclePlate> fill_vector;
+    vector<VehiclePlate> find_vector;
+
+    generate_n(back_inserter(fill_vector), N, [&]() {
+        return generator.Generate();
+    });
+    generate_n(back_inserter(find_vector), N, [&]() {
+        return generator.Generate();
+    });
+
+    int found;
+    {
+        LOG_DURATION("unordered_set");
+        unordered_set<VehiclePlate, PlateHasherTrivial> container;
+        for (auto& p : fill_vector) {
+            container.insert(p);
+        }
+        found = count_if(find_vector.begin(), find_vector.end(), [&](const VehiclePlate& plate) {
+            return container.count(plate) > 0;
+        });
     }
+    cout << "Найдено повторов (1): "s << found << endl;
+
+    {
+        LOG_DURATION("set");
+        set<VehiclePlate> container;
+        for (auto& p : fill_vector) {
+            container.insert(p);
+        }
+        found = count_if(find_vector.begin(), find_vector.end(), [&](const VehiclePlate& plate) {
+            return container.count(plate) > 0;
+        });
+    }
+    cout << "Найдено повторов (2): "s << found << endl;
 }
+
+/* OutPut
+unordered_set: 850 ms
+Найдено повторов (1): 9
+set: 481 ms
+Найдено повторов (2): 9
+*/
