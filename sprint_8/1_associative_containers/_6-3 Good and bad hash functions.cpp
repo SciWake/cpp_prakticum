@@ -62,9 +62,15 @@ private:
     int region_;
 };
 
-struct PlateHasherTrivial {
+// struct PlateHasherTrivial {
+//     size_t operator()(const VehiclePlate& plate) const {
+//         return static_cast<size_t>(plate.GetDigits());
+//     }
+// };
+
+struct PlateHasherRegion {
     size_t operator()(const VehiclePlate& plate) const {
-        return static_cast<size_t>(plate.GetDigits());
+        return static_cast<size_t>(plate.GetDigits() + plate.GetRegion() * 1000);
     }
 };
 
@@ -129,7 +135,7 @@ int main() {
     int found;
     {
         LOG_DURATION("unordered_set");
-        unordered_set<VehiclePlate, PlateHasherTrivial> container;
+        unordered_set<VehiclePlate, PlateHasherRegion> container; 
         for (auto& p : fill_vector) {
             container.insert(p);
         }
