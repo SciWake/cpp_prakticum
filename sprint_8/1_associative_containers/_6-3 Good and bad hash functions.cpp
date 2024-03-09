@@ -166,6 +166,39 @@ int main() {
     cout << "Найдено повторов (2): "s << found << endl;
 }
 
+// static const int N = 50'000;
+// PlateHasherTrivial
+/* Output
+unordered_set: 850 ms
+Найдено повторов (1): 9
+set: 481 ms
+Найдено повторов (2): 9
+*/
+
+// static const int N = 50'000;
+// PlateHasherRegion
+/* Output
+unordered_set: 31 ms
+Найдено повторов (1): 9
+set: 490 ms
+Найдено повторов (2): 9
+*/
+
+// static const int N = 50'000;
+// PlateHasherString
+/* Output
+unordered_set: 56 ms
+Найдено повторов (1): 9
+set: 443 ms
+Найдено повторов (2): 9
+*/
+
+
+// static const int N = 1'000'000;
+// PlateHasherTrivial
+/*Output:
+Очень долго...
+*/
 
 // static const int N = 1'000'000;
 // PlateHasherRegion
