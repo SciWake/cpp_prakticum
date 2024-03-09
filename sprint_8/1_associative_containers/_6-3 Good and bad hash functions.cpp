@@ -62,16 +62,24 @@ private:
     int region_;
 };
 
-// struct PlateHasherTrivial {
-//     size_t operator()(const VehiclePlate& plate) const {
-//         return static_cast<size_t>(plate.GetDigits());
-//     }
-// };
+struct PlateHasherTrivial {
+    size_t operator()(const VehiclePlate& plate) const {
+        return static_cast<size_t>(plate.GetDigits());
+    }
+};
 
 struct PlateHasherRegion {
     size_t operator()(const VehiclePlate& plate) const {
         return static_cast<size_t>(plate.GetDigits() + plate.GetRegion() * 1000);
     }
+};
+
+struct PlateHasherString {
+    size_t operator()(const VehiclePlate& plate) const {
+        return hasher(plate.ToString());
+    }
+
+    hash<string> hasher;
 };
 
 ostream& operator<<(ostream& out, VehiclePlate plate) {
@@ -119,7 +127,7 @@ private:
 
 
 int main() {
-    static const int N = 50'000;
+    static const int N = 1'000'000;
 
     PlateGenerator generator;
     vector<VehiclePlate> fill_vector;
@@ -135,7 +143,7 @@ int main() {
     int found;
     {
         LOG_DURATION("unordered_set");
-        unordered_set<VehiclePlate, PlateHasherRegion> container; 
+        unordered_set<VehiclePlate, PlateHasherString> container; 
         for (auto& p : fill_vector) {
             container.insert(p);
         }
@@ -158,9 +166,21 @@ int main() {
     cout << "Найдено повторов (2): "s << found << endl;
 }
 
-/* Output
-unordered_set: 35 ms
-Найдено повторов (1): 9
-set: 516 ms
-Найдено повторов (2): 9
+
+// static const int N = 1'000'000;
+// PlateHasherRegion
+/*Output:
+unordered_set: 4343 ms
+Найдено повторов (1): 3790
+set: 13087 ms
+Найдено повторов (2): 3790
+*/
+
+// static const int N = 1'000'000;
+// PlateHasherString
+/*Output:
+unordered_set: 1586 ms
+Найдено повторов (1): 3790
+set: 12685 ms
+Найдено повторов (2): 3790
 */
