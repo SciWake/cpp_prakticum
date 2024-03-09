@@ -12,18 +12,25 @@ public:
     // Создаёт вектор указателей на копии объектов из other
     PtrVector(const PtrVector& other) {
         items_.reserve(other.GetItems().size());
-        for (auto ptr: other.GetItems()) {
-            auto copy_ptr = ptr ? new T(*ptr) : nullptr;
-            items_.push_back(copy_ptr);
+        try {
+            for (auto item: other.GetItems()) {
+                auto copy_ptr = item ? new T(*item) : nullptr;
+                items_.push_back(copy_ptr);
+            }
+        } catch (...) {
+            // удаляем элементы в векторе и перевыбрасываем пойманное исключение
+            DeleteItems();
+            throw;
         }
     }
 
     // Деструктор удаляет объекты в куче, на которые ссылаются указатели,
     // в векторе items_
     ~PtrVector() {
-        for (auto ptr : items_) {
-            delete ptr;
+        for (auto item : items_) {
+            delete item;
         }
+        items_.clear(); 
     }
 
     // Возвращает ссылку на вектор указателей
@@ -37,6 +44,11 @@ public:
     }
 
 private:
+    void DeleteItems() noexcept {
+        for (auto item : items_) {
+            delete item;
+        }
+    }
     vector<T*> items_;
 };
 
