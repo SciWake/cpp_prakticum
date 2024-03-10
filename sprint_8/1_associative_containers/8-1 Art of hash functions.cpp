@@ -32,6 +32,27 @@ int FindCollisions(const Hash& hasher, istream& text) {
     return cur_collisions;
 }
 
+// template <typename Hash>
+// int FindCollisions(const Hash& hasher, istream& text) {
+//     unordered_map<size_t, unordered_set<string>> hash_words;
+    
+//     string word;
+//     int collision_count = 0;
+    
+//     while(text >> word) {
+//         size_t word_hash = hasher(word);
+//         //when hash is repeated, check if the word was already encountered
+//         // - gives a smaller unordered_set to search in
+//         if(hash_words.count(word_hash) > 0 && hash_words.at(word_hash).count(word) == 0) {
+//             //same hash different word
+//             ++collision_count;
+//         }
+//         //insert new words
+//         hash_words[word_hash].insert(word);
+//     }
+//     return collision_count;
+// }
+
 // Это плохой хешер. Его можно использовать для тестирования.
 // Подумайте, в чём его недостаток
 struct HasherDummy {
