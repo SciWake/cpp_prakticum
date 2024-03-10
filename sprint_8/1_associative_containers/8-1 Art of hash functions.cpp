@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -65,8 +66,33 @@ struct HasherDummy {
     }
 };
 
+struct DummyHash {
+    size_t operator()(const string&) const {
+        return 42;
+    }
+};
+
+// int main() {
+//     hash<string> str_hasher;
+//     int collisions = FindCollisions(str_hasher, cin);
+//     cout << "Found collisions: "s << collisions << endl;
+// }
+
 int main() {
-    hash<string> str_hasher;
-    int collisions = FindCollisions(str_hasher, cin);
-    cout << "Found collisions: "s << collisions << endl;
-}
+    DummyHash dummy_hash;
+    HasherDummy dummy_hash_2;
+    hash<string> good_hash;
+
+    {
+        istringstream stream("I love C++"s);
+        cout << FindCollisions(dummy_hash, stream) << endl;
+    }
+    {
+        istringstream stream("I love C++"s);
+        cout << FindCollisions(dummy_hash_2, stream) << endl;
+    }
+    {
+        istringstream stream("I love C++"s);
+        cout << FindCollisions(good_hash, stream) << endl;
+    }
+} 
