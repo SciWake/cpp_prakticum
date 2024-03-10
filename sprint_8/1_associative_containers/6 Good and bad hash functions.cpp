@@ -8,10 +8,10 @@
 #include <random>
 #include <set>
 #include <string>
-#include <sstream>
 #include <unordered_set>
 
 using namespace std;
+
 
 class VehiclePlate {
 private:
@@ -82,8 +82,11 @@ struct PlateHasherString {
 };
 
 struct PlateHasherAll {
-    // реализуйте собственный хешер, который будет
-    // эффективнее и лучше всех остальных
+    size_t operator()(const VehiclePlate& plate) const {
+        auto letters = plate.GetLetters();
+        return static_cast<size_t>(plate.GetDigits() + plate.GetRegion() * 1000ULL + (letters[0] - 'A') * 1'000'000ULL
+                                   + (letters[1] - 'A') * 100'000'000ULL + (letters[2] - 'A') * 10'000'000'000ULL);
+    }
 };
 
 ostream& operator<<(ostream& out, VehiclePlate plate) {
@@ -117,7 +120,7 @@ private:
 
     // допустимые значения сохраним в static переменных
     // они объявлены inline, чтобы их определение не надо было выносить вне класса
-    inline static const array possible_regions_
+    inline static array possible_regions_
         = {1,  2,  102, 3,   4,   5,   6,   7,   8,  9,   10,  11,  12, 13,  113, 14,  15, 16,  116, 17, 18,
            19, 20, 21,  121, 22,  23,  93,  123, 24, 84,  88,  124, 25, 125, 26,  27,  28, 29,  30,  31, 32,
            33, 34, 35,  36,  136, 37,  38,  85,  39, 91,  40,  41,  82, 42,  142, 43,  44, 45,  46,  47, 48,
@@ -126,7 +129,7 @@ private:
            77, 97, 99,  177, 199, 197, 777, 78,  98, 178, 79,  83,  86, 87,  89,  94,  95};
 
     // постфикс s у литерала тут недопустим, он приведёт к неопределённому поведению
-    inline static const string_view possible_chars_ = "ABCEHKMNOPTXY"sv;
+    inline static string_view possible_chars_ = "ABCEHKMNOPTXY"sv;
 };
 
 int main() {
