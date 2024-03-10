@@ -1,11 +1,35 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
+
 template <typename Hash>
 int FindCollisions(const Hash& hasher, istream& text) {
-    // место для вашей реализации
+    unordered_set<string> seen_words;
+    unordered_set<size_t> seen_hashes;
+
+    int cur_collisions = 0;
+
+    string word;
+    while (text >> word) {
+        if (seen_words.count(word) > 0) {
+            continue;
+        }
+        seen_words.insert(word);
+
+        size_t hash = hasher(word);
+        if (seen_hashes.count(hash) > 0) {
+            ++cur_collisions;
+            continue;
+        }
+
+        seen_hashes.insert(hash);
+    }
+
+    return cur_collisions;
 }
 
 // Это плохой хешер. Его можно использовать для тестирования.
