@@ -16,9 +16,18 @@ struct Dumbbell {
 };
 
 struct DumbbellHash {
-// реализуйте хешер для Dumbbell
-};
+    size_t operator() (const Circle& circ) const {
+        return d_hasher(circ.x) + 37 * d_hasher(circ.y) + 37*37 * d_hasher(circ.r);
+    }
 
+    size_t operator() (const Dumbbell& bell) const {
+        return 37*(37*37*37 * operator()(bell.circle1) + operator()(bell.circle2))
+            + s_hasher(bell.text);
+    }
+
+    hash<double> d_hasher;
+    hash<string> s_hasher;
+};
 int main() {
     DumbbellHash hash;
     Dumbbell dumbbell{{10, 11.5, 2.3}, {3.14, 15, -8}, "abc"s};
