@@ -4,15 +4,26 @@
 #include <cmath>
 #include <sstream>
 
+using namespace std;
+
+namespace statistics {
+namespace tests {
+
+using namespace aggregations;
+
+namespace detail {
+
 template <typename T>
-string GetPrinterValue(AggregPrinter<T>& printer) {
+string GetPrinterValue(statistics::AggregPrinter<T>& printer) {
     ostringstream out;
     printer.Print(out);
 
     return std::move(out).str();
 }
 
-void TestStatAggregSum() {
+}  // namespace detail
+
+void AggregSum() {
     Sum aggreg;
     assert(*aggreg.Get() == 0);
 
@@ -23,7 +34,7 @@ void TestStatAggregSum() {
     assert(*aggreg.Get() == -10.);
 }
 
-void TestStatAggregMax() {
+void AggregMax() {
     Max aggreg;
     assert(!aggreg.Get());
 
@@ -34,7 +45,7 @@ void TestStatAggregMax() {
     assert(*aggreg.Get() == 20.);
 }
 
-void TestStatAggregMean() {
+void AggregMean() {
     Mean aggreg;
     assert(!aggreg.Get());
 
@@ -46,7 +57,7 @@ void TestStatAggregMean() {
     assert(*aggreg.Get() == 5.);
 }
 
-void TestStatAggregStandardDeviation() {
+void AggregStandardDeviation() {
     StandardDeviation aggreg;
     assert(!aggreg.Get());
 
@@ -65,7 +76,7 @@ void TestStatAggregStandardDeviation() {
     assert(std::abs(*aggreg.Get() - 5.) < 1e-5);
 }
 
-void TestStatAggregMode() {
+void AggregMode() {
     Mode aggreg;
     assert(!aggreg.Get());
 
@@ -82,10 +93,10 @@ void TestStatAggregMode() {
     assert(std::round(*aggreg.Get()) == 2.);
 }
 
-void TestStatAggregPrinter() {
-    AggregPrinter<Max> printer;
+void AggregPrinter() {
+    statistics::AggregPrinter<Max> printer;
 
-    assert(GetPrinterValue(printer) == "max is undefined\n"s);
+    assert(detail::GetPrinterValue(printer) == "max is undefined\n"s);
     printer.PutValue(10.);
     printer.PutValue(20.);
     printer.PutValue(-40.);
@@ -93,5 +104,8 @@ void TestStatAggregPrinter() {
     std::ostringstream out;
     out << 20.;
 
-    assert(GetPrinterValue(printer) == "max is "s + out.str() + "\n"s);
+    assert(detail::GetPrinterValue(printer) == "max is "s + out.str() + "\n"s);
 }
+
+}  // namespace tests
+}  // namespace statistics
