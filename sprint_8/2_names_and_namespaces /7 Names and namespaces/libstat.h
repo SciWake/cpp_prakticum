@@ -7,14 +7,18 @@
 #include <string_view>
 #include <unordered_map>
 
-using namespace std;
+namespace statistics {
+using namespace std::string_literals;
+using namespace std::string_view_literals;
+
+namespace aggregations {
 
 class Sum {
 public:
     void PutValue(double value);
-    optional<double> Get() const;
+    std::optional<double> Get() const;
 
-    static string_view GetValueName() {
+    static std::string_view GetValueName() {
         return "sum"sv;
     }
 
@@ -25,59 +29,61 @@ private:
 class Max {
 public:
     void PutValue(double value);
-    optional<double> Get() const;
+    std::optional<double> Get() const;
 
-    static string_view GetValueName() {
+    static std::string_view GetValueName() {
         return "max"sv;
     }
 
 private:
-    optional<double> cur_max_;
+    std::optional<double> cur_max_;
 };
 
 class Mean {
 public:
     void PutValue(double value);
-    optional<double> Get() const;
+    std::optional<double> Get() const;
 
-    static string_view GetValueName() {
+    static std::string_view GetValueName() {
         return "mean"sv;
     }
 
 private:
-    ::Sum sum_;
+    Sum sum_;
     size_t count_ = 0;
 };
 
 class StandardDeviation {
 public:
     void PutValue(double value);
-    optional<double> Get() const;
+    std::optional<double> Get() const;
 
-    static string_view GetValueName() {
+    static std::string_view GetValueName() {
         return "standard deviation"sv;
     }
 
 private:
-    ::Sum sum_;
-    ::Sum sum_sq_;
+    Sum sum_;
+    Sum sum_sq_;
     size_t count_ = 0;
 };
 
 class Mode {
 public:
     void PutValue(double value);
-    optional<double> Get() const;
+    std::optional<double> Get() const;
 
-    static string_view GetValueName() {
+    static std::string_view GetValueName() {
         return "mode"sv;
     }
 
 private:
-    ::unordered_map<double, size_t> counts_;
-    optional<double> cur_max_;
+    std::unordered_map<double, size_t> counts_;
+    std::optional<double> cur_max_;
     size_t cur_count_ = 0;
 };
+
+}  // namespace aggregations
 
 template <typename Aggreg>
 class AggregPrinter {
@@ -86,7 +92,7 @@ public:
         inner_.PutValue(value);
     }
 
-    void Print(ostream& out) const {
+    void Print(std::ostream& out) const {
         auto val = inner_.Get();
         out << inner_.GetValueName() << " is "sv;
         if (val) {
@@ -94,16 +100,22 @@ public:
         } else {
             out << "undefined"sv;
         }
-        out << endl;
+        out << std::endl;
     }
 
 private:
     Aggreg inner_;
 };
 
-void TestStatAggregSum();
-void TestStatAggregMax();
-void TestStatAggregMean();
-void TestStatAggregStandardDeviation();
-void TestStatAggregMode();
-void TestStatAggregPrinter();
+namespace tests {
+
+void AggregSum();
+void AggregMax();
+void AggregMean();
+void AggregStandardDeviation();
+void AggregMode();
+void AggregPrinter();
+
+}  // namespace tests
+
+}  // namespace statistics
