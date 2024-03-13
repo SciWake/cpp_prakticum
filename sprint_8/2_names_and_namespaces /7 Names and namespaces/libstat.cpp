@@ -1,27 +1,27 @@
 #include "libstat.h"
 
-void SumAggregation::PutValue(double value) {
+void Sum::PutValue(double value) {
     sum_ += value;
 }
 
-optional<double> SumAggregation::Get() const {
+optional<double> Sum::Get() const {
     return sum_;
 }
 
-void AggregateMaximum::PutValue(double value) {
+void Max::PutValue(double value) {
     cur_max_ = max(value, cur_max_.value_or(value));
 }
 
-optional<double> AggregateMaximum::Get() const {
+optional<double> Max::Get() const {
     return cur_max_;
 }
 
-void AggregatorAverage::PutValue(double value) {
+void Mean::PutValue(double value) {
     sum_.PutValue(value);
     ++count_;
 }
 
-optional<double> AggregatorAverage::Get() const {
+optional<double> Mean::Get() const {
     auto val = sum_.Get();
     if (!val || count_ == 0) {
         return nullopt;
@@ -30,13 +30,13 @@ optional<double> AggregatorAverage::Get() const {
     return *val / count_;
 }
 
-void AggregStd::PutValue(double value) {
+void StandardDeviation::PutValue(double value) {
     sum_.PutValue(value);
     sum_sq_.PutValue(value * value);
     ++count_;
 }
 
-optional<double> AggregStd::Get() const {
+optional<double> StandardDeviation::Get() const {
     auto val = sum_.Get();
     auto val2 = sum_sq_.Get();
 

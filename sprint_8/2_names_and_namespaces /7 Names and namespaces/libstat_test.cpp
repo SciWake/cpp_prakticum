@@ -13,7 +13,7 @@ string GetPrinterValue(AggregPrinter<T>& printer) {
 }
 
 void TestStatAggregSum() {
-    SumAggregation aggreg;
+    Sum aggreg;
     assert(*aggreg.Get() == 0);
 
     aggreg.PutValue(10.);
@@ -24,7 +24,7 @@ void TestStatAggregSum() {
 }
 
 void TestStatAggregMax() {
-    AggregateMaximum aggreg;
+    Max aggreg;
     assert(!aggreg.Get());
 
     aggreg.PutValue(10.);
@@ -35,7 +35,7 @@ void TestStatAggregMax() {
 }
 
 void TestStatAggregMean() {
-    AggregatorAverage aggreg;
+    Mean aggreg;
     assert(!aggreg.Get());
 
     aggreg.PutValue(10.);
@@ -47,7 +47,7 @@ void TestStatAggregMean() {
 }
 
 void TestStatAggregStandardDeviation() {
-    AggregStd aggreg;
+    StandardDeviation aggreg;
     assert(!aggreg.Get());
 
     aggreg.PutValue(10.);
@@ -83,7 +83,7 @@ void TestStatAggregMode() {
 }
 
 void TestStatAggregPrinter() {
-    AggregPrinter<AggregateMaximum> printer;
+    AggregPrinter<Max> printer;
 
     assert(GetPrinterValue(printer) == "max is undefined\n"s);
     printer.PutValue(10.);
