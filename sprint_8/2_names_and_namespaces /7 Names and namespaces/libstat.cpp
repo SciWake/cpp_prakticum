@@ -1,5 +1,10 @@
 #include "libstat.h"
 
+using namespace std;
+
+namespace statistics {
+namespace aggregations {
+
 void Sum::PutValue(double value) {
     sum_ += value;
 }
@@ -59,3 +64,6 @@ void Mode::PutValue(double value) {
 optional<double> Mode::Get() const {
     return cur_max_;
 }
+
+}  // namespace aggregations
+}  // namespace statistics
