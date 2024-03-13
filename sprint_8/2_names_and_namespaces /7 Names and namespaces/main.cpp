@@ -3,13 +3,13 @@
 #include <iostream>
 using namespace std;
 
-int main() {
-    TestStatAggregSum();
-    TestStatAggregMax();
-    TestStatAggregMean();
-    TestStatAggregStandardDeviation();
-    TestStatAggregMode();
-    TestStatAggregPrinter();
 
-    cout << "Test passed!"sv << endl;
-}
+int main() {
+    statistics::tests::AggregSum();
+    statistics::tests::AggregMax();
+    statistics::tests::AggregMean();
+    statistics::tests::AggregStandardDeviation();
+    statistics::tests::AggregMode();
+    statistics::tests::AggregPrinter();
+
+   
