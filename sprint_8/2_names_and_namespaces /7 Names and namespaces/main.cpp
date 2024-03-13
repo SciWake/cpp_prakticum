@@ -12,4 +12,5 @@ int main() {
     statistics::tests::AggregMode();
     statistics::tests::AggregPrinter();
 
-   
+    cout << "Test passed!"s << endl;
+}
