@@ -62,9 +62,9 @@ public:
         // рекомендуется использовать метод ToString() и существующий 
         // класс hash<string>
         // return static_cast<size_t>(plate.Hash());
+        //  return std::hash<std::string>{}(plate.ToString());
         return static_cast<size_t>(hasher_(plate.ToString()));
     }
-      
 private:
     hash<string> hasher_;
 };
@@ -84,7 +84,11 @@ public:
 
     // запарковать машину с указанным номером
     void Park(VehiclePlate car) {
-        // место для вашей реализации
+        if (now_parked_.contains(car)) {
+            throw ParkingException;
+        }
+        TimePoint now = Clock::now();
+        now_parked_.try_emplace(car, now);
     }
 
     // забрать машину с указанным номером
