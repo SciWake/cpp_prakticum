@@ -99,7 +99,17 @@ public:
     // получить счёт за конкретный автомобиль
     int64_t GetCurrentBill(const VehiclePlate& car) const {
         // место для вашей реализации
+        auto now = Clock::now();
+        Duration dt{};
+        if (now_parked_.contains(car)) {
+            dt = now - now_parked_.at(car);
+        }
+        if (complete_parks_.contains(car)) {
+            dt += complete_parks_.at(car);
+        }
+        return chrono::duration_cast<chrono::seconds>(dt).count() * cost_per_second_;
     }
+
 
     // завершить расчётный период
     // те машины, которые находятся на парковке на данный момент, должны 
