@@ -93,7 +93,14 @@ public:
 
     // забрать машину с указанным номером
     void Withdraw(const VehiclePlate& car) {
-        // место для вашей реализации
+        try {
+            TimePoint now = Clock::now();
+            Duration dt = now - now_parked_.at(car);
+            complete_parks_[car] += dt;
+            now_parked_.erase(car);
+        } catch (...) {
+            throw ParkingException();
+        }
     }
 
     // получить счёт за конкретный автомобиль
