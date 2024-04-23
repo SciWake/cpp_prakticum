@@ -9,6 +9,8 @@
 
 using namespace std;
 
+// структура хранит информацию о трате:
+// категорию товара или услуги и стоимость
 struct Spending {
     string category;
     int amount;
@@ -30,8 +32,13 @@ string FindMostExpensiveCategory(const vector<Spending>& spendings) {
 }
 
 vector<Spending> LoadFromJson(istream& input) {
-    // место для вашей реализации
-    // пример корректного JSON-документа в условии
+    Document doc = Load(input);
+    vector<Spending> result;
+    for (const Node& node : doc.GetRoot().AsArray()) {
+        result.push_back({node.AsMap().at("category"s).AsString(),  //
+                          node.AsMap().at("amount"s).AsInt()});
+    }
+    return result;
 }
 
 int main() {
