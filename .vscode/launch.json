@@ -1,38 +1,6 @@
 {
+  "version": "0.2.0",
   "configurations": [
-    {
-      "name": "C/C++: g++ build and debug active file",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${fileDirname}/${fileBasenameNoExtension}",
-      "args": [
-        "-fdiagnostics-color=always",
-        "-g",
-        "${file}",
-        "-Wall",
-        "-o",
-        "${fileDirname}/${fileBasenameNoExtension}"
-      ],
-      "stopAtEntry": false,
-      "cwd": "${fileDirname}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Set Disassembly Flavor to Intel",
-          "text": "-gdb-set disassembly-flavor intel",
-          "ignoreFailures": true
-        }
-      ],
-      "preLaunchTask": "C/C++: g++ build active file",
-      "miDebuggerPath": "/usr/bin/gdb"
-    },
     {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
@@ -40,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/alex/github/cpp_prakticum/sprint_6/1_memory_model",
-      "program": "/home/alex/github/cpp_prakticum/sprint_6/1_memory_model/build/Debug/outDebug",
+      "cwd": "/home/alex/github/cpp_prakticum/sprint_8/2_names_and_namespaces /2 Call my name",
+      "program": "/home/alex/github/cpp_prakticum/sprint_8/2_names_and_namespaces /2 Call my name/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
@@ -52,6 +20,5 @@
         }
       ]
     }
-  ],
-  "version": "2.0.0"
+  ]
 }
