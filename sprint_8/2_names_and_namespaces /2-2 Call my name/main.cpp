@@ -4,10 +4,10 @@
 #include <numeric>
 #include <vector>
 
-// не меняйте файлы xml.h и xml.cpp
 #include "xml.h"
 
 using namespace std;
+
 
 struct Spending {
     string category;
@@ -30,8 +30,14 @@ string FindMostExpensiveCategory(const vector<Spending>& spendings) {
 }
 
 vector<Spending> LoadFromXml(istream& input) {
-    // место для вашей реализации
-    // пример корректного XML-документа в условии
+    const Document doc = Load(input);
+    vector<Spending> result;
+    result.reserve(doc.GetRoot().Children().size());
+    for (const Node& node : doc.GetRoot().Children()) {
+        result.push_back(
+            {node.AttributeValue<string>("category"s), node.AttributeValue<int>("amount"s)});
+    }
+    return result;
 }
 
 int main() {
