@@ -1,3 +1,4 @@
+// C/C++ Runner franneck94
 {
   "configurations": [
     {
@@ -5,7 +6,7 @@
       "includePath": [
         "${workspaceFolder}/**"
       ],
-      "compilerPath": "/usr/bin/gcc",
+      "compilerPath": "/usr/bin/gcc", 
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "linux-gcc-x64",
