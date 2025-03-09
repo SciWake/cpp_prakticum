@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/sciwake/github/cpp_prakticum/sprint_0/3_conditions_and_cycles",
+      "program": "/Users/sciwake/github/cpp_prakticum/sprint_0/3_conditions_and_cycles/build/Debug/outDebug"
+    }
+  ]
+}
