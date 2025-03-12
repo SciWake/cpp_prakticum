@@ -9,7 +9,7 @@ int main() {
     while (b != 0) {
         int c = b;
         b = a % b;
-        a = c;
+        a = c; 
     }
     cout << a << endl;
 }
