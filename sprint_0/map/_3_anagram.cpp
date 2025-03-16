@@ -1,10 +1,19 @@
 #include <iostream>
 #include <string>
+#include <map>
 
 using namespace std;
 
+map<char, int> BuildCharCounters(const string& word) {
+    map<char, int> counters;
+    for (char c : word) {
+        ++counters[c];
+    }
+    return counters;
+}
+
 bool CheckAnagram(const string& s1, const string& s2) {
-    // напишите решение тут
+    return BuildCharCounters(s1) == BuildCharCounters(s2);
 }
 
 // напишем небольшую функцию для проверки
