@@ -73,32 +73,37 @@ set<string> ParseQuery(const string& text, const set<string>& stop_words) {
 }
 
 int MatchDocument(const pair<int, vector<string>>& content, const set<string>& query_words) {
-    set<string> processed_words;
+    set<string> unique_words(content.second.begin(), content.second.end());
+
     int relevance = 0;
-    for (const string& word : content.second) {
-        if (processed_words.count(word)) {
-            continue;
+    for (const auto& word : unique_words) {
+        if (query_words.count(word) > 0) {
+            ++relevance;
         }
-        relevance += query_words.count(word);
-        processed_words.insert(word);
-        
     }
     return relevance;
 }
 
-// Для каждого найденного документа возвращает его id
+// int MatchDocument(const pair<int, vector<string>>& content, const set<string>& query_words) {
+//     set<string> unique_words(content.second.begin(), content.second.end());
+//     return count_if(unique_words.begin(), unique_words.end(),
+//                     [&](const string& word) {
+//                         return query_words.count(word) > 0;
+//                     });
+// }
+
 vector<pair<int, int>> FindDocuments(const vector<pair<int, vector<string>>>& documents,
-    const set<string>& stop_words,
-    const string& query) {
+                                     const set<string>& stop_words,
+                                     const string& query) {
     const set<string> query_words = ParseQuery(query, stop_words);
     vector<pair<int, int>> matched_documents;
 
-    for (const auto& [document_id, document] : documents) {
-        int relevance = MatchDocument({document_id, document}, query_words);
-        if (relevance) {
-            matched_documents.push_back({document_id, relevance});
+    for (const auto& doc : documents) {
+        if (int relevance = MatchDocument(doc, query_words); relevance > 0) {
+            matched_documents.emplace_back(doc.first, relevance);
         }
     }
+
     return matched_documents;
 }
 
