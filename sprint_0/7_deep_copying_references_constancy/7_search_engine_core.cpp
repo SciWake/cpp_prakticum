@@ -71,13 +71,7 @@ set<string> ParseQuery(const string& text, const set<string>& stop_words) {
     set<string> query_words;
 
     // Напишите код функции
-<<<<<<< HEAD
-    for (const string& word: SplitIntoWordsNoStop(text, stop_words)) {
-        query_words.insert(word);
-    }
-=======
 
->>>>>>> 4e5933b (study: add a code template)
     return query_words;
 }
 
@@ -85,44 +79,20 @@ set<string> ParseQuery(const string& text, const set<string>& stop_words) {
 // встречаются слова поискового запроса query_words
 bool MatchDocument(const vector<string>& document_words, const set<string>& query_words) {
     // Напишите код функции
-<<<<<<< HEAD
-    for (const string& word: document_words) {
-        if (query_words.count(word)) {
-            return true;
-        }
-    }
-=======
->>>>>>> 4e5933b (study: add a code template)
 
     return false;
 }
 
 // Возвращает массив id документов, подходящих под запрос query
 // Стоп-слова исключаются из поиска
-<<<<<<< HEAD
-vector<int> FindDocuments(const vector<vector<string>>& documents, 
-                          const set<string>& stop_words, 
-=======
 vector<int> FindDocuments(const vector<vector<string>>& documents, const set<string>& stop_words,
->>>>>>> 4e5933b (study: add a code template)
                           const string& query) {
     vector<int> matched_documents;
 
     // Напишите код функции
     // Воспользуйте вспомогательными функциями ParseQuery, MatchDocument
     // В качестве id документа используйте его индекс в массиве documents
-<<<<<<< HEAD
-    int id = 0;
-    for (const vector<string>& document: documents) {
-        if (MatchDocument(document, ParseQuery(query, stop_words))) {
-            matched_documents.push_back(id);
-        }
-        ++id;
-    }
-    
-=======
 
->>>>>>> 4e5933b (study: add a code template)
     return matched_documents;
 }
 
