@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/sciwake/github/cpp_prakticum/sprint_0/3_conditions_and_cycles",
-      "program": "/Users/sciwake/github/cpp_prakticum/sprint_0/3_conditions_and_cycles/build/Debug/outDebug"
+      "cwd": "/Users/sciwake/github/cpp_prakticum/sprint_1/1_basic_algorithms",
+      "program": "/Users/sciwake/github/cpp_prakticum/sprint_1/1_basic_algorithms/build/Debug/outDebug"
     }
   ]
 }
