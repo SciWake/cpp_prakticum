@@ -22,7 +22,7 @@ vector<int> CountNamesLong(const set<string>& storage, const vector<string>& can
     vector<int> output;
     for (auto& name : candidates) {
         // Подсчитываем количество вхождений name в storage стандартным алгоритмом count
-        output.push_back(count(storage.begin(), storage.end(), name));
+        output.push_back(static_cast<int>(count(storage.begin(), storage.end(), name)));
     }
     return output;
 }
@@ -31,7 +31,9 @@ vector<int> CountNamesLong(const set<string>& storage, const vector<string>& can
 // но выполняется быстрее за счёт использования встроенного алгоритма count вместо общего
 vector<int> CountNames(const set<string>& storage, const vector<string>& candidates) {
     vector<int> output;
-    // Напишите реализацию здесь
+    for (auto& name: candidates) {
+        output.push_back(static_cast<int>(storage.count(name)));
+    }
     return output;
 }
 
@@ -68,4 +70,31 @@ int main() {
 
     // Вы можете замерить время работы функции CountNames и сравнить её с временем
     // работы CountNamesLong
+    cout << "Testing fast version" << endl;
+    // Замеряем время работы несколько раз, так как оно может отличаться от запуска к запуску
+    for (int i = 0; i < SAMPLE_COUNT; ++i) {
+        // Засекаем время запуска функции
+        auto begin = chrono::steady_clock::now();
+        CountNames(s, v);
+        // Засекаем время завершения функции
+        auto end = chrono::steady_clock::now();
+
+        // Выводим время работы в микросекундах
+        cout << "Time difference Long = "s
+             << chrono::duration_cast<chrono::microseconds>(end - begin).count() << "[µs]"s << endl;
+    }
 }
+
+
+// Testing slow version
+// Time difference Long = 1816191[µs]
+// Time difference Long = 1804298[µs]
+// Time difference Long = 1806497[µs]
+// Time difference Long = 1808299[µs]
+// Time difference Long = 1809536[µs]
+// Testing fast version
+// Time difference Long = 28336[µs]
+// Time difference Long = 28218[µs]
+// Time difference Long = 28200[µs]
+// Time difference Long = 28095[µs]
+// Time difference Long = 27811[µs]
