@@ -32,3 +32,4 @@
 *.app
 algolia/*
 outdebug
+.DS_Store
