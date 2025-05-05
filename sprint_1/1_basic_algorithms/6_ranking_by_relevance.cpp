@@ -141,7 +141,6 @@ vector<pair<int, int>> FindTopDocuments(const vector<pair<int, vector<string>>>&
         }
     }
     return top_documents;
-    
 }
 
 
