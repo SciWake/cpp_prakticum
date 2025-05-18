@@ -8,24 +8,28 @@ public:
     // Включает телевизор.
     void TurnOn() {
         // Напишите код этого метода.
+        tv_status_ = true;
     }
 
     // Выключает телевизор.
     void TurnOff() {
         // Напишите код этого метода.
+        tv_status_ = false;
     }
 
     // Возвращает true, если телевизор включён и false, если телевизор выключен.
     bool IsTurnedOn() {
         // Напишите код этого метода.
-        return false;
+        return tv_status_;
     }
 
     // Возвращает номер текущего канала либо 0, если телевизор был выключен.
     // Номер канала не сбрасывается при выключении и повторном включении.
     // При первом включении телевизор показывает канал № 1.
     int GetCurrentChannel() {
-        // Напишите код этого метода.
+        if (tv_status_) {
+            return number_channel_;
+        }
         return 0;
     }
 
@@ -33,9 +37,21 @@ public:
     // Если указан недопустимый номер канала или телевизор выключен, возвращает false и не меняет
     // текущий канал. В противном случае возвращает true.
     bool SelectChannel(int channel) {
-        // Напишите код этого метода.
-        return false;
-    }
+    return (tv_status_ && channel >= 1 && channel <= 99)
+        ? (number_channel_ = channel, true)
+        : false;
+}
+    // bool SelectChannel(int channel) {
+    //     if (tv_status_ && channel >= 1 && channel <= 99) {
+    //         number_channel_ = channel;
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    private:
+        int number_channel_ = 1;
+        bool tv_status_ = false;
 };
 
 int main() {
