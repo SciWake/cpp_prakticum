@@ -55,6 +55,11 @@ struct DocumentContent {
     vector<string> words;
 };
 
+struct Document {
+    int id;
+    int relevance;
+};
+
 vector<string> SplitIntoWordsNoStop(const string& text, const set<string>& stop_words) {
     vector<string> words;
     for (const string& word : SplitIntoWords(text)) {
@@ -96,9 +101,9 @@ int MatchDocument(const DocumentContent& content, const set<string>& query_words
 }
 
 // Для каждого документа возвращает его релевантность и id
-vector<pair<int, int>> FindAllDocuments(const vector<DocumentContent>& documents,
+vector<Document> FindAllDocuments(const vector<DocumentContent>& documents,
                                         const set<string>& query_words) {
-    vector<pair<int, int>> matched_documents;
+    vector<Document> matched_documents;
     for (const auto& document : documents) {
         const int relevance = MatchDocument(document, query_words);
         if (relevance > 0) {
@@ -108,19 +113,25 @@ vector<pair<int, int>> FindAllDocuments(const vector<DocumentContent>& documents
     return matched_documents;
 }
 
+
+bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
+    return lhs.relevance < rhs.relevance;
+}
+
+
 // Возвращает топ-5 самых релевантных документов в виде пар: {id, релевантность}
-vector<pair<int, int>> FindTopDocuments(const vector<DocumentContent>& documents,
+vector<Document> FindTopDocuments(const vector<DocumentContent>& documents,
                                         const set<string>& stop_words, const string& raw_query) {
     const set<string> query_words = ParseQuery(raw_query, stop_words);
     auto matched_documents = FindAllDocuments(documents, query_words);
 
-    sort(matched_documents.begin(), matched_documents.end());
+    sort(matched_documents.begin(), matched_documents.end(), HasDocumentGreaterRelevance);
     reverse(matched_documents.begin(), matched_documents.end());
     if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
         matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
     }
     for (auto& matched_document : matched_documents) {
-        swap(matched_document.first, matched_document.second);
+        swap(matched_document.id, matched_document.relevance);
     }
     return matched_documents;
 }
