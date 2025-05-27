@@ -128,11 +128,22 @@ vector<Document> FindTopDocuments(const vector<DocumentContent>& documents,
     return matched_documents;
 }
 
-/*
 class SearchServer {
-// Разместите здесь метод AddDocument и данные класса (вектор документов и множество стоп-слов)
+public:
+    void AddDocument(int document_id, const string& document) {
+        const vector<string> words = SplitIntoWordsNoStop(document, stop_words_);
+        documents_.push_back({document_id, words});
+    }
+private:
+    struct DocumentContent {
+        int id = 0;
+        vector<string> words;
+    };
+    
+    vector<DocumentContent> documents_;
+    set<string> stop_words_;
+
 };
-*/
 
 int main() {
     const string stop_words_joined = ReadLine();
@@ -150,4 +161,4 @@ int main() {
         cout << "{ document_id = "s << document_id << ", relevance = "s << relevance << " }"s
              << endl;
     }
-}   
+}
