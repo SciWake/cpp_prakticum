@@ -42,14 +42,6 @@ vector<string> SplitIntoWords(const string& text) {
     return words;
 }
 
-set<string> ParseStopWords(const string& text) {
-    set<string> stop_words;
-    for (const string& word : SplitIntoWords(text)) {
-        stop_words.insert(word);
-    }
-    return stop_words;
-}
-
 struct DocumentContent {
     int id = 0;
     vector<string> words;
@@ -134,6 +126,12 @@ public:
         const vector<string> words = SplitIntoWordsNoStop(document);
         documents_.push_back({document_id, words});
     }
+    
+    void SetStopWords(const string& text) {
+        for (const string& word : SplitIntoWords(text)) {
+            stop_words_.insert(word);
+        }
+    }
 private:
     struct DocumentContent {
         int id = 0;
@@ -156,19 +154,8 @@ private:
 };
 
 int main() {
-    const string stop_words_joined = ReadLine();
-    const set<string> stop_words = ParseStopWords(stop_words_joined);
-
-    // Read documents
-    vector<DocumentContent> documents;
-    const int document_count = ReadLineWithNumber();
-    for (int document_id = 0; document_id < document_count; ++document_id) {
-        AddDocument(documents, stop_words, document_id, ReadLine());
-    }
-
-    const string query = ReadLine();
-    for (auto [document_id, relevance] : FindTopDocuments(documents, stop_words, query)) {
-        cout << "{ document_id = "s << document_id << ", relevance = "s << relevance << " }"s
-             << endl;
-    }
-}
+    SearchServer search_server;
+    search_server.SetStopWords("a the in of an with"s);   
+    search_server.AddDocument(1, "a small dog with brown eyes"s);
+ }
+ 
