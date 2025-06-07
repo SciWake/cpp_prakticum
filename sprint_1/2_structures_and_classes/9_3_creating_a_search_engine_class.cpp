@@ -154,9 +154,22 @@ private:
 
 };
 
-int main() {
+// считывает из cin стоп-слова и документ и возвращает настроенный экземпляр поисковой системы
+SearchServer CreateSearchServer() {
     SearchServer search_server;
-    search_server.SetStopWords("a the in of an with"s);   
-    search_server.AddDocument(1, "a small dog with brown eyes"s);
+    search_server.SetStopWords(ReadLine());
+
+    const int document_count = ReadLineWithNumber();
+    for (int document_id = 0; document_id < document_count; ++document_id) {
+        search_server.AddDocument(document_id, ReadLine());
+    }
+
+    return search_server;
+}
+int main() {
+    SearchServer search_server = CreateSearchServer();
+    // SearchServer search_server;
+    // search_server.SetStopWords("a the in of an with"s);   
+    // search_server.AddDocument(1, "a small dog with brown eyes"s);
  }
  
