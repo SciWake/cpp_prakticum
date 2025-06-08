@@ -42,12 +42,6 @@ vector<string> SplitIntoWords(const string& text) {
     return words;
 }
 
-
-struct DocumentContent {
-    int id = 0;
-    vector<string> words;
-};
-
 struct Document {
     int id;
     int relevance;
@@ -57,20 +51,19 @@ bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
     return lhs.relevance > rhs.relevance;
 }
 
-
 class SearchServer {
 public:
-    void AddDocument(int document_id, const string& document) {
-        const vector<string> words = SplitIntoWordsNoStop(document);
-        documents_.push_back({document_id, words});
-    }
-    
     void SetStopWords(const string& text) {
         for (const string& word : SplitIntoWords(text)) {
             stop_words_.insert(word);
         }
     }
-    
+
+    void AddDocument(int document_id, const string& document) {
+        const vector<string> words = SplitIntoWordsNoStop(document);
+        documents_.push_back({document_id, words});
+    }
+
     vector<Document> FindTopDocuments(const string& raw_query) const {
         const set<string> query_words = ParseQuery(raw_query);
         auto matched_documents = FindAllDocuments(query_words);
@@ -82,20 +75,24 @@ public:
         return matched_documents;
     }
 
-
 private:
     struct DocumentContent {
         int id = 0;
         vector<string> words;
     };
-    
+
     vector<DocumentContent> documents_;
+
     set<string> stop_words_;
-    
+
+    bool IsStopWord(const string& word) const {
+        return stop_words_.count(word) > 0;
+    }
+
     vector<string> SplitIntoWordsNoStop(const string& text) const {
         vector<string> words;
         for (const string& word : SplitIntoWords(text)) {
-            if (stop_words_.count(word) == 0) {
+            if (!IsStopWord(word)) {
                 words.push_back(word);
             }
         }
@@ -110,6 +107,16 @@ private:
         return query_words;
     }
 
+    vector<Document> FindAllDocuments(const set<string>& query_words) const {
+        vector<Document> matched_documents;
+        for (const auto& document : documents_) {
+            const int relevance = MatchDocument(document, query_words);
+            if (relevance > 0) {
+                matched_documents.push_back({document.id, relevance});
+            }
+        }
+        return matched_documents;
+    }
 
     static int MatchDocument(const DocumentContent& content, const set<string>& query_words) {
         if (query_words.empty()) {
@@ -126,20 +133,8 @@ private:
         }
         return static_cast<int>(matched_words.size());
     }
-
-    vector<Document> FindAllDocuments(const set<string>& query_words) const {
-        vector<Document> matched_documents;
-        for (const auto& document : documents_) {
-            const int relevance = MatchDocument(document, query_words);
-            if (relevance > 0) {
-                matched_documents.push_back({document.id, relevance});
-            }
-        }
-        return matched_documents;
-    }
 };
 
-// считывает из cin стоп-слова и документ и возвращает настроенный экземпляр поисковой системы
 SearchServer CreateSearchServer() {
     SearchServer search_server;
     search_server.SetStopWords(ReadLine());
@@ -151,7 +146,6 @@ SearchServer CreateSearchServer() {
 
     return search_server;
 }
-
 
 int main() {
     const SearchServer search_server = CreateSearchServer();
