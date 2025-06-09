@@ -10,7 +10,7 @@ size_t ComputeWeight(const string& word) {
     size_t weight = word.size();
     for (const char ch : word) {
         int lower = tolower(ch);
-        if (lower == 'a') weight += 3;
+        if (lower == 'a') weight += 5;
         else if (lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') weight += 2;
     }
     return weight;
