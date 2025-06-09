@@ -5,22 +5,16 @@
 
 using namespace std;
 
-// Функция для подсчёта количества букв 'a'/'A' в слове
-auto ComputeWeight(const string& word) {
-    size_t count_a = 0, count_vowel = 0;
-    
-    for (const auto& ch: word) {
-        int lower = tolower(ch);
-        if (lower == 'a') {
-            count_a++;
-        }
-        if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') {
-            count_vowel++;
-        }
-    }
-    return 3 * count_a + 2 * count_vowel + word.size();
-}
 
+size_t ComputeWeight(const string& word) {
+    size_t weight = word.size();
+    for (const char ch : word) {
+        int lower = tolower(ch);
+        if (lower == 'a') weight += 3;
+        else if (lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') weight += 2;
+    }
+    return weight;
+}
 
 int main() {
     size_t n;
