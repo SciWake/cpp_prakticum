@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +18,26 @@ int ReadLineWithNumber() {
     return result;
 }
 
+vector<string> SplitIntoWords(const string& text) {
+    vector<string> words;
+    string word;
+    for (const char c : text) {
+        if (c == ' ') {
+            if (!word.empty()) {
+                words.push_back(word);
+                word.clear();
+            }
+        } else {
+            word += c;
+        }
+    }
+    if (!word.empty()) {
+        words.push_back(word);
+    }
+
+    return words;
+}
+
 int main() {
     const int queryCount = ReadLineWithNumber();
 
@@ -27,9 +47,9 @@ int main() {
     }
     const string buzzword = ReadLine();
 
-    cout << count_if(queries.begin(), queries.end(), [](const string& query) {
-        // Реализуйте эту лямбда-функцию
-        // Верните true, если query содержит слово buzzword
+    cout << count_if(queries.begin(), queries.end(), [buzzword](const string& query) {
+        const vector<string> query_words = SplitIntoWords(query);
+        return count(query_words.begin(), query_words.end(), buzzword) != 0;
     });
     cout << endl;
 }
