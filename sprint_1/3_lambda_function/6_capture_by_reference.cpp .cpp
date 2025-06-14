@@ -9,7 +9,7 @@ using namespace std;
 int CountAndAddNewDogs(const vector<string>& new_dogs, const map<string, int>& max_amount,
                        map<string, int>& shelter) {
     return count_if(begin(new_dogs), end(new_dogs), [&](const string& dog){
-        if (shelter.at(dog) > max_amount.at(dog)) {
+        if (shelter[dog] < max_amount.at(dog)) {
             ++shelter[dog];
             return true;
         } 
