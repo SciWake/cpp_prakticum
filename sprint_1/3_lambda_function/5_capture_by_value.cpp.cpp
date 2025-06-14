@@ -48,8 +48,11 @@ int main() {
     const string buzzword = ReadLine();
 
     cout << count_if(queries.begin(), queries.end(), [buzzword](const string& query) {
-        const vector<string> query_words = SplitIntoWords(query);
-        return count(query_words.begin(), query_words.end(), buzzword) != 0;
+        for (const string& word : SplitIntoWords(query)) {
+            if (word == buzzword) return true;
+        }
+        return false;
+
     });
     cout << endl;
 }
