@@ -61,8 +61,8 @@ public:
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
-        const set<string> query_words = ParseQuery(raw_query);
-        auto matched_documents = FindAllDocuments(query_words);
+        const Query query = ParseQuery(raw_query);
+        auto matched_documents = FindAllDocuments(query);
 
         sort(matched_documents.begin(), matched_documents.end(),
              [](const Document& lhs, const Document& rhs) {
@@ -78,6 +78,17 @@ private:
     struct DocumentContent {
         int id = 0;
         vector<string> words;
+    };
+
+    struct QueryWord {
+        string data;
+        bool is_minus;
+        bool is_stop;
+    };
+
+    struct Query {
+        set<string> plus_words;
+        set<string> minus_words;
     };
 
     vector<DocumentContent> documents_;
@@ -98,18 +109,35 @@ private:
         return words;
     }
 
-    set<string> ParseQuery(const string& text) const {
-        set<string> query_words;
-        for (const string& word : SplitIntoWordsNoStop(text)) {
-            query_words.insert(word);
+    QueryWord ParseQueryWord(string text) const {
+        bool is_minus = false;
+        // Word shouldn't be empty
+        if (text[0] == '-') {
+            is_minus = true;
+            text = text.substr(1);
         }
-        return query_words;
+        return {text, is_minus, IsStopWord(text)};
     }
 
-    vector<Document> FindAllDocuments(const set<string>& query_words) const {
+    Query ParseQuery(const string& text) const {
+        Query query;
+        for (const string& word : SplitIntoWords(text)) {
+            const QueryWord query_word = ParseQueryWord(word);
+            if (!query_word.is_stop) {
+                if (query_word.is_minus) {
+                    query.minus_words.insert(query_word.data);
+                } else {
+                    query.plus_words.insert(query_word.data);
+                }
+            }
+        }
+        return query;
+    }
+
+    vector<Document> FindAllDocuments(const Query& query) const {
         vector<Document> matched_documents;
         for (const auto& document : documents_) {
-            const int relevance = MatchDocument(document, query_words);
+            const int relevance = MatchDocument(document, query);
             if (relevance > 0) {
                 matched_documents.push_back({document.id, relevance});
             }
@@ -117,16 +145,19 @@ private:
         return matched_documents;
     }
 
-    static int MatchDocument(const DocumentContent& content, const set<string>& query_words) {
-        if (query_words.empty()) {
+    static int MatchDocument(const DocumentContent& content, const Query& query) {
+        if (query.plus_words.empty()) {
             return 0;
         }
         set<string> matched_words;
         for (const string& word : content.words) {
+            if (query.minus_words.count(word) != 0) {
+                return 0;
+            }
             if (matched_words.count(word) != 0) {
                 continue;
             }
-            if (query_words.count(word) != 0) {
+            if (query.plus_words.count(word) != 0) {
                 matched_words.insert(word);
             }
         }
