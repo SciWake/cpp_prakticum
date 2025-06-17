@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <set>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -57,7 +58,9 @@ public:
 
     void AddDocument(int document_id, const string& document) {
         const vector<string> words = SplitIntoWordsNoStop(document);
-        documents_.push_back({document_id, words});
+        for (const auto& word: words) {
+            word_to_documents_[word].insert(document_id);
+        }
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
@@ -75,11 +78,6 @@ public:
     }
 
 private:
-    struct DocumentContent {
-        int id = 0;
-        vector<string> words;
-    };
-
     struct QueryWord {
         string data;
         bool is_minus;
@@ -91,9 +89,9 @@ private:
         set<string> minus_words;
     };
 
-    vector<DocumentContent> documents_;
-
+    map<string, set<int>> word_to_documents_;
     set<string> stop_words_;
+
 
     bool IsStopWord(const string& word) const {
         return stop_words_.count(word) > 0;
@@ -135,33 +133,30 @@ private:
     }
 
     vector<Document> FindAllDocuments(const Query& query) const {
-        vector<Document> matched_documents;
-        for (const auto& document : documents_) {
-            const int relevance = MatchDocument(document, query);
-            if (relevance > 0) {
-                matched_documents.push_back({document.id, relevance});
+        map<int, int> document_to_relevance;
+        for (const auto& p_word : query.plus_words) {
+            set<int> documents_id = word_to_documents_.at(p_word);
+            if (!documents_id.empty()) {
+                for (const int& document_id: documents_id) {
+                    ++document_to_relevance[document_id];
+                }
             }
+        }
+
+        for (const auto& m_word : query.minus_words) {
+            set<int> documents_id = word_to_documents_.at(m_word);
+            if (!documents_id.empty()) {
+                for (const int& document_id: documents_id) {
+                    document_to_relevance.erase(document_id);
+                }
+            }
+        }
+
+        vector<Document> matched_documents;
+        for (const auto& [document_id, score] : document_to_relevance) {
+            matched_documents.push_back({document_id, score});
         }
         return matched_documents;
-    }
-
-    static int MatchDocument(const DocumentContent& content, const Query& query) {
-        if (query.plus_words.empty()) {
-            return 0;
-        }
-        set<string> matched_words;
-        for (const string& word : content.words) {
-            if (query.minus_words.count(word) != 0) {
-                return 0;
-            }
-            if (matched_words.count(word) != 0) {
-                continue;
-            }
-            if (query.plus_words.count(word) != 0) {
-                matched_words.insert(word);
-            }
-        }
-        return static_cast<int>(matched_words.size());
     }
 };
 
