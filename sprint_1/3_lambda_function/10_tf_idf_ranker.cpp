@@ -45,7 +45,7 @@ vector<string> SplitIntoWords(const string& text) {
 
 struct Document {
     int id;
-    int relevance;
+    double relevance;
 };
 
 class SearchServer {
@@ -57,9 +57,12 @@ public:
     }
 
     void AddDocument(int document_id, const string& document) {
-        for (const string& word : SplitIntoWordsNoStop(document)) {
-            word_to_documents_[word].insert(document_id);
+        const vector<string> words = SplitIntoWordsNoStop(document);
+        const double inv_word_count = 1.0 / words.size();
+        for (const string& word : words) {
+            word_to_document_freqs_[word][document_id] += inv_word_count;
         }
+        ++document_count_;
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
@@ -88,8 +91,8 @@ private:
         set<string> minus_words;
     };
 
-    map<string, set<int>> word_to_documents_;
-
+    int document_count_ = 0;
+    map<string, map<int, double>> word_to_document_freqs_;
     set<string> stop_words_;
 
     bool IsStopWord(const string& word) const {
@@ -134,6 +137,8 @@ private:
     vector<Document> FindAllDocuments(const Query& query) const {
         map<int, int> document_to_relevance;
         vector<Document> matched_documents;
+
+        // Plus words
         for (const string& plus_word : query.plus_words) {
             if (word_to_documents_.count(plus_word)) {
                 for (const int& id_document : word_to_documents_.at(plus_word)) {
@@ -141,6 +146,8 @@ private:
                 }
             }
         }
+
+        // Minus words
         for (const string& minus_word: query.minus_words) {
             if (word_to_documents_.count(minus_word)) {
                 for (const int& id_document : word_to_documents_.at(minus_word)) {
@@ -149,6 +156,7 @@ private:
             }
         }
 
+        // Update matched_documents
         for (const auto& [id_document, relevance]: document_to_relevance) {
             matched_documents.push_back({id_document, relevance});
         }
