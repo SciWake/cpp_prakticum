@@ -1,10 +1,11 @@
 #include <algorithm>
+#include <cmath>
 #include <iostream>
+#include <map>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
-#include <map>
 
 using namespace std;
 
@@ -134,36 +135,42 @@ private:
         return query;
     }
 
-    vector<Document> FindAllDocuments(const Query& query) const {
-        map<int, int> document_to_relevance;
-        vector<Document> matched_documents;
+    double CalculateIDFWord(const string& word) const {
+        return log(document_count_ * 1.0 / word_to_document_freqs_.at(word).size());
+    }
 
+    vector<Document> FindAllDocuments(const Query& query) const {
+        map<int, double> document_to_relevance;
+        vector<Document> matched_documents;
+         
         // Plus words
         for (const string& plus_word : query.plus_words) {
-            if (word_to_documents_.count(plus_word)) {
-                for (const int& id_document : word_to_documents_.at(plus_word)) {
-                    ++document_to_relevance[id_document];
-                }
+            if (!word_to_document_freqs_.count(plus_word)) {
+                continue;
+            }
+            const double idf = CalculateIDFWord(plus_word);
+            for (const auto& [document_id, tf] : word_to_document_freqs_.at(plus_word)) {
+                document_to_relevance[document_id] += tf * idf;
             }
         }
 
         // Minus words
         for (const string& minus_word: query.minus_words) {
-            if (word_to_documents_.count(minus_word)) {
-                for (const int& id_document : word_to_documents_.at(minus_word)) {
-                    document_to_relevance.erase(id_document);
+            if (word_to_document_freqs_.count(minus_word)) {
+                for (const auto& [document_id, tf] : word_to_document_freqs_.at(minus_word)) {
+                    document_to_relevance.erase(document_id);
                 }
             }
         }
 
         // Update matched_documents
-        for (const auto& [id_document, relevance]: document_to_relevance) {
-            matched_documents.push_back({id_document, relevance});
+        for (const auto& [document_id, relevance]: document_to_relevance) {
+            matched_documents.push_back({document_id, relevance});
         }
         return matched_documents;
-
     }
 };
+
 
 SearchServer CreateSearchServer() {
     SearchServer search_server;
