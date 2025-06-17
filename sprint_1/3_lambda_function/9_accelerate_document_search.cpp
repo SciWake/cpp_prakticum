@@ -67,9 +67,9 @@ public:
         auto matched_documents = FindAllDocuments(query);
 
         sort(matched_documents.begin(), matched_documents.end(),
-             [](const Document& lhs, const Document& rhs) {
-                 return lhs.relevance > rhs.relevance;
-             });
+            [](const Document& lhs, const Document& rhs) {
+                return lhs.relevance > rhs.relevance;
+            });
         if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
             matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
         }
@@ -109,7 +109,7 @@ private:
     QueryWord ParseQueryWord(string text) const {
         bool is_minus = false;
         // Word shouldn't be empty
-        if (text[0] == '-') {
+        if (!text.empty() && text[0] == '-') {
             is_minus = true;
             text = text.substr(1);
         }
@@ -175,6 +175,6 @@ int main() {
     const string query = ReadLine();
     for (const auto& [document_id, relevance] : search_server.FindTopDocuments(query)) {
         cout << "{ document_id = "s << document_id << ", "
-             << "relevance = "s << relevance << " }"s << endl;
+            << "relevance = "s << relevance << " }"s << endl;
     }
 }
